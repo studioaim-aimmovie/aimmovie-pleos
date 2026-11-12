@@ -1,0 +1,13 @@
+// 크리에이터 지원 — apps/web 의 app/(view)/creator/page.tsx 대응.
+
+import BackButton from "@/components/BackButton";
+import CreatorWrap from "@/components/creator_wrap";
+
+export default function CreatorPage() {
+    return (
+        <div id="contents" className="sub_page creator_page">
+            <BackButton className="back_btn" />
+            <CreatorWrap />
+        </div>
+    );
+}

@@ -1,0 +1,8 @@
+{
+  "name": "aim_movie_pleos",
+  "private": true,
+  "workspaces": [
+    "web",
+    "packages/*"
+  ]
+}

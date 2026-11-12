@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- MediaSessionService 가 재생 중에 미디어 포그라운드 서비스로 올라간다(targetSdk 34 는 유형별 권한이 따로 필요하다). -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+
+    <!-- Pleos Connect 는 Android Automotive OS 기반이다. 차량 전용 산출물로 선언한다. -->
+    <uses-feature
+        android:name="android.hardware.type.automotive"
+        android:required="true" />
+
+    <!-- name: 수동 DI 컨테이너(AppContainer)를 Application 이 보유한다.
+         networkSecurityConfig: release 는 평문 HTTP 를 막고, debug 소스셋이 로컬 CMS(localhost·10.0.2.2)만 연다. -->
+    <application
+        android:name=".AimMovieApplication"
+        android:allowBackup="false"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AimMovie">
+
+        <!-- distractionOptimized 메타데이터를 일부러 선언하지 않는다.
+             영상 앱은 P단·속도 0 에서만 쓸 수 있고, DO 미선언 앱은 P단을 벗어나면 시스템이 종료한다.
+             주행 제한 로직을 직접 만들지 않고 플랫폼 동작에 맡긴다.
+
+             MainActivity 는 apps/pleos 웹 번들을 띄우는 WebView 셸이다.
+             configChanges: 멀티윈도우 구역 전환(세로 1구역 ↔ 가로 2구역)마다 Activity 가 재생성되면 WebView 가 페이지를
+             다시 읽어 스크롤·입력값을 잃는다. 크기 변경은 Activity 가 직접 받고 웹이 창 비율로 레이아웃을 다시 잡는다.
+             screenOrientation 은 고정하지 않는다 — Pleos 는 영상 앱의 가로 고정을 허용하지만(2026-10-19 회신) 웹이 세로·가로를
+             모두 지원하므로 구역에 맞춰 그대로 채운다. -->
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|density|keyboardHidden|navigation"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:resizeableActivity="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 네이티브 재생 화면(Media3). 웹이 브릿지 play 로 띄우고 닫히면 웹 화면으로 돌아간다.
+             같은 태스크에 쌓이므로 런처·미디어 컨트롤로 앱을 다시 열면 재생 화면이 그대로 보인다.
+             configChanges 는 MainActivity 와 같다 — 구역 전환 중 재생이 끊기지 않게 재생성하지 않는다. -->
+        <activity
+            android:name=".ui.play.PlayerActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|density|keyboardHidden|navigation"
+            android:exported="false"
+            android:resizeableActivity="true" />
+
+        <!-- 시스템 미디어 컨트롤(play/pause/stop) 연동. Pleos 는 영상 앱에 MediaSession 연동을 요구한다.
+             플레이어·세션은 AppContainer.playerHolder 가 하나만 갖고, 이 서비스는 그 세션을 시스템에 내보이기만 한다.
+             재생 화면을 떠나면 서비스도 멈춘다 — 주행 중 오디오(백그라운드 재생)는 1차 범위에서 제외했다.
+             exported: 시스템 미디어 센터·알림 같은 외부 컨트롤러가 세션에 붙으려면 열려 있어야 한다(Media3 표준 선언).
+             권한으로 막지 않는 이유(ExportedService 무시): 시스템 컨트롤러가 어떤 권한을 갖는지 앱이 정할 수 없고,
+             세션이 받는 명령은 재생 제어뿐이다. -->
+        <service
+            android:name=".player.PlaybackService"
+            android:exported="true"
+            android:foregroundServiceType="mediaPlayback"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="androidx.media3.session.MediaSessionService" />
+            </intent-filter>
+        </service>
+    </application>
+
+</manifest>

@@ -1,0 +1,617 @@
+@font-face {
+    font-family: "Roboto Condensed";
+    font-weight: 300;
+    font-display: swap;
+    src:
+        local("Roboto Condensed"),
+        url("/fonts/RobotoCondensed-Light.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Roboto Condensed";
+    font-weight: 700;
+    font-display: swap;
+    src:
+        local("Roboto Condensed"),
+        url("/fonts/RobotoCondensed-Bold.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Pretendard";
+    font-weight: 900;
+    font-display: swap;
+    src:
+        local("Pretendard Black"),
+        url("/fonts/Pretendard-Black.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Pretendard";
+    font-weight: 800;
+    font-display: swap;
+    src:
+        local("Pretendard ExtraBold"),
+        url("/fonts/Pretendard-ExtraBold.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Pretendard";
+    font-weight: 700;
+    font-display: swap;
+    src:
+        local("Pretendard Bold"),
+        url("/fonts/Pretendard-Bold.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Pretendard";
+    font-weight: 600;
+    font-display: swap;
+    src:
+        local("Pretendard SemiBold"),
+        url("/fonts/Pretendard-SemiBold.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Pretendard";
+    font-weight: 500;
+    font-display: swap;
+    src:
+        local("Pretendard Medium"),
+        url("/fonts/Pretendard-Medium.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Pretendard";
+    font-weight: 400;
+    font-display: swap;
+    src:
+        local("Pretendard Regular"),
+        url("/fonts/Pretendard-Regular.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Pretendard";
+    font-weight: 300;
+    font-display: swap;
+    src:
+        local("Pretendard Light"),
+        url("/fonts/Pretendard-Light.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Pretendard";
+    font-weight: 200;
+    font-display: swap;
+    src:
+        local("Pretendard ExtraLight"),
+        url("/fonts/Pretendard-ExtraLight.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Pretendard";
+    font-weight: 100;
+    font-display: swap;
+    src:
+        local("Pretendard Thin"),
+        url("/fonts/Pretendard-Thin.woff2") format("woff2");
+}
+
+/* 영문(라틴) 전용 폰트 — 언어 en일 때만 기본 폰트로 사용(한글은 Pretendard로 폴백). */
+@font-face {
+    font-family: "HostGrotesk";
+    font-weight: 300;
+    font-display: swap;
+    src: url("/fonts/HostGrotesk-Light.woff2") format("woff2");
+}
+@font-face {
+    font-family: "HostGrotesk";
+    font-weight: 400;
+    font-display: swap;
+    src: url("/fonts/HostGrotesk-Regular.woff2") format("woff2");
+}
+@font-face {
+    font-family: "HostGrotesk";
+    font-weight: 500;
+    font-display: swap;
+    src: url("/fonts/HostGrotesk-Medium.woff2") format("woff2");
+}
+@font-face {
+    font-family: "HostGrotesk";
+    font-weight: 600;
+    font-display: swap;
+    src: url("/fonts/HostGrotesk-SemiBold.woff2") format("woff2");
+}
+@font-face {
+    font-family: "HostGrotesk";
+    font-weight: 700;
+    font-display: swap;
+    src: url("/fonts/HostGrotesk-Bold.woff2") format("woff2");
+}
+@font-face {
+    font-family: "HostGrotesk";
+    font-weight: 800;
+    font-display: swap;
+    src: url("/fonts/HostGrotesk-ExtraBold.woff2") format("woff2");
+}
+
+/* 기본 UI 폰트 스택(변수). 리셋이 이 값을 사용하며, 언어 en에서만 HostGrotesk를 앞세운다.
+   HostGrotesk는 라틴 글리프만 있어 한글은 자동으로 Pretendard로 폴백된다. */
+:root {
+    --ui-font: "Pretendard", sans-serif;
+}
+html[lang="en"] {
+    --ui-font: "HostGrotesk", "Pretendard", sans-serif;
+}
+
+/* 영문(en): 자간을 기본값(normal)으로. 전역의 음수 letter-spacing은 Pretendard/한글 기준이라
+   HostGrotesk(라틴)엔 과하다. 산재한 선언(특이도↑)을 덮기 위해 * + !important로 강제.
+   (apps/web globals.scss 에서 옮겼다 — 세로 디자인이 apps/web 모바일과 같아야 한다.) */
+html[lang="en"] * {
+    letter-spacing: normal !important;
+}
+
+/* 영문 전용 줄바꿈 유틸 — 기본 숨김, 언어 en에서만 노출(mo_br의 언어판). */
+.en_br {
+    display: none;
+}
+html[lang="en"] .en_br {
+    display: inline;
+}
+
+/* 영문(HostGrotesk) 히어로 타이틀 굵기 보정. ko(Pretendard)엔 미적용.
+   데스크탑700/모바일800 규칙을 언어 한정으로 덮으므로 !important 사용.
+   .title .char는 font-weight:inherit라 이 값을 자동 상속한다. */
+html[lang="en"] .creator_inner .title,
+html[lang="en"] .about_inner .title,
+html[lang="en"] .about_page .boxes .box .box_title,
+html[lang="en"] .about_page .intro {
+    font-weight: 600 !important;
+}
+
+html[lang="en"] .about_page .boxes .box .box_body,
+html[lang="en"] .creator_page .hero .desc {
+    font-weight: 400 !important;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+a,
+abbr,
+acronym,
+address,
+article,
+aside,
+audio,
+b,
+big,
+blockquote,
+body,
+canvas,
+caption,
+cite,
+code,
+dd,
+del,
+details,
+dfn,
+div,
+dl,
+dt,
+em,
+fieldset,
+figcaption,
+figure,
+footer,
+form,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+header,
+hgroup,
+html,
+i,
+iframe,
+img,
+input,
+ins,
+kbd,
+label,
+legend,
+li,
+mark,
+nav,
+object,
+ol,
+output,
+p,
+pre,
+q,
+s,
+samp,
+section,
+select,
+small,
+span,
+strike,
+strong,
+sub,
+sup,
+table,
+tbody,
+td,
+textarea,
+tfoot,
+th,
+thead,
+time,
+tr,
+tt,
+ul,
+var,
+video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-family: var(--ui-font, "Pretendard", sans-serif);
+    font-weight: 400;
+    font-size: 16px;
+    color: #fff;
+    vertical-align: baseline;
+    -webkit-text-size-adjust: 100%;
+    font-feature-settings: "liga" 0;
+}
+
+body,
+html {
+    width: 100%;
+    // height: 100%;
+    background-color: #151a23;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+td,
+th,
+tr {
+    vertical-align: middle;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block;
+}
+
+body {
+    font: 100%;
+    color: #fff;
+}
+
+li,
+ol,
+ul {
+    list-style: none;
+}
+
+.clb::after,
+ol::after,
+ul::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+dl,
+li {
+    float: left;
+}
+
+blockquote,
+q {
+    quotes: none;
+}
+
+blockquote {
+    &:after,
+    &:before {
+        content: "";
+        content: none;
+    }
+}
+
+q {
+    &:after,
+    &:before {
+        content: "";
+        content: none;
+    }
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+a {
+    text-decoration: none;
+    color: #fff;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: transparent;
+
+    &:hover {
+        text-decoration: none;
+    }
+}
+
+caption,
+legend {
+    display: none;
+}
+
+input {
+    font: 100%;
+    outline: 0;
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+select {
+    font: 100%;
+    outline: 0;
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    &::-ms-expand {
+        display: none;
+    }
+}
+
+input {
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -webkit-appearance: none;
+
+    &[type="checkbox"],
+    &[type="radio"] {
+        background: 0 0;
+        border: none;
+        cursor: pointer;
+    }
+
+    &[type="submit"] {
+        cursor: pointer;
+    }
+}
+
+strong {
+    font-weight: 700;
+}
+
+input:focus::-webkit-input-placeholder,
+textarea:focus::-webkit-input-placeholder,
+input:focus:-moz-placeholder,
+textarea:focus:-moz-placeholder,
+input:focus::-moz-placeholder,
+textarea:focus::-moz-placeholder,
+input:focus:-ms-input-placeholder,
+textarea:focus:-ms-input-placeholder {
+    color: transparent;
+}
+
+input {
+    &:-ms-input-placeholder,
+    &::-webkit-input-placeholder {
+        color: #939598;
+    }
+
+    &::-moz-placeholder {
+        color: #939598;
+        color: #939598;
+    }
+}
+
+button {
+    border: none;
+    background: 0 0;
+    padding: 0;
+    font-family: var(--ui-font, "Pretendard", sans-serif);
+
+    &:focus {
+        outline: 0;
+    }
+}
+
+.bld {
+    display: none;
+}
+
+.after,
+.afters:after {
+    content: ".";
+    display: block;
+    visibility: hidden;
+    clear: both;
+    height: 0;
+    font-size: 0;
+}
+
+@mixin after {
+    &:after {
+        content: ".";
+        display: block;
+        visibility: hidden;
+        clear: both;
+        height: 0;
+        font-size: 0;
+    }
+}
+
+@mixin bgo {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+}
+
+@mixin bg_cover {
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+@mixin bg_contain {
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+@mixin bg($position, $size) {
+    background-position: $position;
+    background-size: $size;
+    background-repeat: no-repeat;
+}
+
+@mixin strong {
+    font-weight: 700;
+}
+
+@mixin line-clamp-one {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+@mixin line-clamp($line-height, $line-clamp) {
+    line-height: $line-height;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    // max-height 제거(apps/web 과 동일): 딱 N줄 이론값으로 자르면 크롬이 라인박스 서브픽셀
+    // 반올림 때문에 마지막 줄을 잘라 한 줄 덜 보였다. 줄 수 제한은 -webkit-line-clamp 가 맡는다.
+    -webkit-line-clamp: $line-clamp;
+}
+
+// ── 레이아웃 분기 — **폭이 아니라 창 비율로 나눈다** ──
+//
+// apps/web 은 폭(≤1032 모바일 / ≥1033 데스크탑)으로 나누지만, Pleos 는 3구역 멀티윈도우라
+// 같은 앱 창이 세로 1구역(약 840×1212) ↔ 가로 2구역(약 1700×1212) ↔ 전체(2560×1380)를 오간다.
+// 840 은 폭 기준으로는 "태블릿"이지만 실제로는 길쭉한 세로 창이라 모바일 디자인이 맞다.
+//
+// 규칙은 차량 네이티브 앱(car/pleos/.../ui/layout/LayoutMode.kt)과 같다:
+//   폭 ≤ 높이  또는  폭 < 600px  →  세로(portrait) = apps/web 모바일 디자인(mobile_style)
+//   그 외                         →  가로(landscape) = TV 디자인(web_style)
+// `orientation: portrait` 는 "높이 ≥ 폭"이라 첫 조건과 정확히 같다.
+//
+// ⚠️ JS 쪽 같은 판정은 `src/hooks/useLayoutMode.ts` 에 있다. 기준을 바꾸면 함께 바꾼다.
+//
+// 믹스인 이름(mobile/desktop/phone/tablet)은 apps/web 의 것을 그대로 둔다 — 옮겨 온
+// mobile_style·tablet_style·web_style 를 한 줄도 고치지 않고 이 기준으로 돌리기 위해서다.
+$layout-min-landscape: 600px;
+// 세로 창 안의 폰/태블릿 경계는 apps/web 과 같은 767/768 이다(840 세로 구역은 "태블릿"이 된다
+// — apps/web 모바일을 같은 840 폭으로 열었을 때와 같은 규칙이 걸리게 하려는 것이다).
+$phone-max: 767px;
+$tablet-min: 768px;
+
+// 세로(= apps/web 의 mobile).
+@mixin mobile {
+    @media (orientation: portrait), (max-width: $layout-min-landscape - 1px) {
+        @content;
+    }
+}
+
+// 가로(= apps/web 의 desktop).
+@mixin desktop {
+    @media (orientation: landscape) and (min-width: $layout-min-landscape) {
+        @content;
+    }
+}
+
+// 세로 중 폰 폭(≤767).
+@mixin phone {
+    @media (orientation: portrait) and (max-width: $phone-max),
+        (max-width: $layout-min-landscape - 1px) {
+        @content;
+    }
+}
+
+// 세로 중 태블릿 폭(≥768). apps/web 은 상한 1032 를 두지만, 여기서는 세로인 한 상한이 없다
+// (세로 창이 1033 이상이 되는 구역은 없고, 생기더라도 데스크탑으로 넘기면 안 된다).
+@mixin tablet {
+    @media (orientation: portrait) and (min-width: $tablet-min) {
+        @content;
+    }
+}
+
+$white_1: #fff;
+$black_1: #151a23;
+$black_2: #333;
+$black_3: #1e1e23;
+$gray_1: #aaa;
+$gray_2: #555;
+$gray_3: #999;
+$gray_4: #282f3b;
+
+$gray_5: #f2f2f2;
+$gray_6: #d4d4d4;
+$gray_7: #444;
+$gray_8: #ccd4e0;
+$gray_9: #333d4a;
+$gray_10: #202531;
+$gray_11: #586270;
+$point_1: #a262ff;
+$point_2: #c17141;
+$blue_1: #d1feff;
+
+// 상태 색 — 브리프에서 확정된 값이다. apps/web/styles/globals.scss 와 값을 맞춘다.
+$red_1: #ff778d; // 경고: 실패·오류
+$mint_1: #5eecff; // 주의: 조심해서 진행해야 하는 안내
+$gray_cool: #909aaa; // 자잘한 폰트: 안내·각주·부가 정보
+$opacity_black_1: rgba(34, 34, 34, 0.75);
+$opacity_gray_1: rgba(84, 84, 84, 0.5);
+
+/* video.js 자막 설정 다이얼로그(.vjs-text-track-settings) 격리.
+   위 전역 리셋(legend{display:none}, select{appearance:none}, fieldset/label/select 등의
+   margin/padding/border/font 제거)이 video.js 내부까지 새어 들어가 다이얼로그가 깨진다.
+   해당 서브트리에서만 리셋이 망친 속성을 revert로 되돌려 video-js.css(.vjs-* 규칙)가 정상 적용되게 한다.
+   (box-sizing은 video.js가 border-box 전제라 되돌리지 않는다.) */
+.video-js .vjs-text-track-settings,
+.video-js .vjs-text-track-settings * {
+    margin: revert;
+    padding: revert;
+    border: revert;
+    font: revert;
+    color: revert;
+    vertical-align: revert;
+    line-height: revert;
+}
+.video-js .vjs-text-track-settings legend {
+    display: revert;
+}
+.video-js .vjs-text-track-settings select,
+.video-js .vjs-text-track-settings input {
+    -webkit-appearance: revert;
+    appearance: revert;
+    border-radius: revert;
+}

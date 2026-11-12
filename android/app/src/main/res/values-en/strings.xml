@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- values/strings.xml 의 영문판. 키 구성은 같게 유지한다. -->
+<resources>
+    <string name="common_retry">Try again</string>
+    <string name="common_network_error">Please check your network connection.</string>
+
+    <string name="player_back">Exit</string>
+    <string name="player_buffering">Loading…</string>
+    <string name="player_episode_label">Season %1$s · Episode %2$s</string>
+    <string name="player_error">This video cannot be played.</string>
+    <string name="player_forward">Forward %1$ss</string>
+    <string name="player_rewind">Back %1$ss</string>
+    <string name="player_load_failed">Couldn\'t load the video information.</string>
+    <string name="player_no_source">No playable video found.</string>
+    <string name="player_pause">Pause</string>
+    <string name="player_play">Play</string>
+
+    <string name="car_player_next">Next episode</string>
+    <string name="car_player_drm_failed">Couldn\'t play this protected (DRM) video.</string>
+    <string name="car_player_drm_unsupported">Protected (DRM) videos can\'t be played in this vehicle.</string>
+</resources>

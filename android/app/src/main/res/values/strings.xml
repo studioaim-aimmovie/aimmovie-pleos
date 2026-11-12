@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 네이티브 문자열은 재생 화면(PlayerActivity)이 쓰는 것만 남았다. 다른 화면 문구는 웹 번들(apps/pleos)이
+     @aim/core i18n 사전으로 그린다. common_*·player_* 는 그 사전(packages/core/src/i18n/{ko,en}.ts)과 같은 문장이므로
+     사전을 고치면 여기도 맞춘다. car_* 는 차량 앱 전용 문구다. -->
+<resources>
+    <string name="app_name" translatable="false">AIMMOVIE</string>
+
+    <string name="common_retry">다시 시도</string>
+    <string name="common_network_error">네트워크 연결을 확인해주세요.</string>
+
+    <string name="player_back">나가기</string>
+    <string name="player_buffering">불러오는 중…</string>
+    <string name="player_episode_label">시즌 %1$s · %2$s회차</string>
+    <string name="player_error">영상을 재생할 수 없습니다.</string>
+    <string name="player_forward">%1$s초 앞으로</string>
+    <string name="player_rewind">%1$s초 뒤로</string>
+    <string name="player_load_failed">영상 정보를 불러오지 못했습니다.</string>
+    <string name="player_no_source">재생할 수 있는 영상이 없습니다.</string>
+    <string name="player_pause">일시정지</string>
+    <string name="player_play">재생</string>
+
+    <string name="car_player_next">다음 회차</string>
+    <string name="car_player_drm_failed">보호된(DRM) 영상을 재생하지 못했습니다.</string>
+    <string name="car_player_drm_unsupported">이 차량에서는 보호된(DRM) 영상을 재생할 수 없습니다.</string>
+</resources>

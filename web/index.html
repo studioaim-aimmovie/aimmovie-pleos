@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <!--
+      Pleos 는 3구역 멀티윈도우라 앱 창이 840×1212 ↔ 1700×1212 ↔ 2560×1380 을 오간다.
+      TV(apps/tv)처럼 `width=1920` 으로 고정하면 세로 구역에서 화면이 1/2 이하로 축소되고
+      가로 구역에서는 레터박스가 생긴다(심사 탈락 사유). 창 크기를 그대로 CSS 뷰포트로 쓰고
+      레이아웃은 창 비율로 고른다(styles/globals.scss 의 mobile/desktop).
+
+      확대/축소는 막는다 — 앱 화면을 두 손가락으로 벌려 레이아웃이 깨지면 되돌릴 방법이 없다.
+    -->
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+        />
+        <title>AIMMOVIE</title>
+    </head>
+    <body>
+        <div id="root"></div>
+        <script type="module" src="/src/main.tsx"></script>
+    </body>
+</html>

@@ -1,0 +1,982 @@
+// apps/pleos 스타일 진입점.
+//
+// 두 디자인을 한 번들에 싣고 **창 비율**로 고른다(globals.scss 의 mobile/desktop 믹스인).
+//  - 가로(landscape) = apps/tv 의 TV 디자인 → web_style.scss(apps/tv 판) + 아래 "가로 보정"
+//  - 세로(portrait)  = apps/web 의 모바일 디자인 → mobile_style.scss + tablet_style.scss(apps/web 판 그대로)
+//
+// import 순서는 apps/web 의 common.scss 와 같다(web → mobile → tablet). 세 파일 모두 자기 안에서
+// globals 를 다시 import 하는 것도 web 과 같다 — 리셋이 다시 깔리는 순서까지 원본과 맞춰야
+// 같은 폭에서 같은 결과가 나온다.
+
+@import "./globals.scss";
+@import "./web_style.scss";
+@import "./mobile_style.scss";
+// 태블릿(세로 768↑)은 mobile 위에 덮어쓰는 층이라 mobile_style 뒤에 와야 한다(apps/web 과 같다).
+// 840 세로 구역이 여기에 걸린다 — apps/web 모바일을 840 폭으로 열었을 때와 같은 규칙이다.
+@import "./tablet_style.scss";
+@import "./swiper.css";
+
+// ── apps/web common.scss 에서 옮긴 공통 규칙 ──
+
+// 상단 안전영역 높이. mobile_style 이 고정 요소(.header, 전체화면 nav/search)를 이만큼 내린다.
+// apps/web 은 Flutter 셸이 `--aim-native-inset-top` 을 주입한다. Pleos 셸은 상태바 아래에서
+// WebView 를 시작하므로 0 이다(주입이 생기면 같은 변수로 받는다).
+:root {
+    --aim-native-inset-top: 0px;
+    --aim-safe-top: var(--aim-native-inset-top, 0px);
+}
+
+// 마이페이지 account_box 의 name/email 이 자동 링크로 감싸질 때의 링크 스타일 무력화(apps/web 과 같다).
+.account_box .info a,
+.account_box .info a[x-apple-data-detectors] {
+    color: inherit !important;
+    text-decoration: none !important;
+    pointer-events: none;
+    -webkit-touch-callout: none;
+}
+
+// [임시] 등급 배지 숨김 — apps/web 이 전역으로 숨긴다. 세로는 web 과 같게 숨기고,
+// 가로는 TV 디자인(배지 노출)을 유지한다.
+@include mobile {
+    .badge_type1 {
+        display: none !important;
+    }
+}
+
+// 카드 포스터(.bg_area) 위 오버레이 라벨(ContentLabels). position 값 → 미리 정한 클래스로 배치.
+.content_label {
+    position: absolute;
+    z-index: 3; // progress_bar(z-index:2) 위
+    line-height: 0; // inline 여백 제거
+    img {
+        display: block;
+        // 업로드 원본 크기 그대로 노출. 썸네일 폭을 넘칠 때만 축소해 레이아웃 깨짐 방지.
+        width: auto;
+        height: auto;
+        max-width: 100%;
+    }
+    &.pos_tl {
+        top: 8px;
+        left: 8px;
+    }
+    &.pos_tc {
+        top: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    &.pos_tr {
+        top: 8px;
+        right: 8px;
+    }
+    &.pos_bl {
+        bottom: 8px;
+        left: 8px;
+    }
+    &.pos_bc {
+        bottom: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    &.pos_br {
+        bottom: 8px;
+        right: 8px;
+    }
+}
+
+// ── 가로 카드의 `.focus_card` 박스 ──
+//
+// 가로(TV 디자인) 카드는 `.swiper-slide`/`li` 와 카드 내용(.bg_area/.ranking) 사이에 `.focus_card`
+// 박스를 하나 더 둔다(apps/tv 마크업 그대로 — TV web_style 의 카드 규칙이 이 계층에 맞춰 있다).
+// apps/tv 는 이 박스의 크기를 focus_nav.scss 에서 줬는데, 그 파일은 리모컨 포커스 링과 함께
+// 걷어냈으므로 크기 규칙만 여기로 옮긴다.
+// ⚠️ 반드시 "레이아웃 중립"이어야 한다 — 슬라이드를 100% 채우고 position 을 주지 않아(static)
+// .ranking 의 절대위치 기준이 .swiper-slide 로 유지되게 한다. 빠지면 카드 폭이 0 이 된다(실측).
+.focus_card {
+    width: 100%;
+    height: 100%;
+}
+
+// ── 터치 기본값 ──
+//
+// 차량은 터치 전용이다. 탭할 때 WebView 가 그리는 회색 하이라이트와 길게 눌렀을 때의 텍스트 선택·
+// 컨텍스트 메뉴는 앱 화면에서 어색하므로 끈다(입력칸은 선택을 남긴다).
+html {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+}
+body {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+input,
+textarea {
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+// ── 조회 상태(로딩/실패) 공통 화면. AsyncBoundary 가 사용한다. ──
+.async_state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    min-height: 60vh;
+    text-align: center;
+
+    &__msg {
+        font-size: 24px;
+        opacity: 0.85;
+    }
+
+    // 실패 화면의 유일한 조작이라 터치 기준(48px↑)을 넉넉히 넘긴다.
+    &__retry {
+        min-width: 200px;
+        min-height: 56px;
+        padding: 0 32px;
+        border: 0;
+        border-radius: 12px;
+        background-color: $point_1;
+        color: $white_1;
+        font-size: 18px;
+        font-weight: 600;
+
+        span {
+            font-size: inherit;
+            color: inherit;
+        }
+    }
+}
+
+@include mobile {
+    .async_state__msg {
+        font-size: 16px;
+    }
+}
+
+// ── 페어링 로그인 ──
+//
+// 이 화면은 `/login` 이라 헤더·푸터가 없다(LayoutShell 의 HIDE_CHROME_PATHS).
+// 화면 전체가 이 컴포넌트이므로 여기서 직접 중앙 정렬하고 여백을 잡는다.
+//
+// 가로 치수는 apps/tv 의 1920×1080 TV 화면값 그대로다(가로 = TV 디자인). 세로는 apps/web 에
+// 대응 화면이 없어(web 은 아이디·비밀번호 로그인), 모바일 디자인의 활자 단계(제목 24 · 본문 15 ·
+// 보조 13)와 카드 톤(.confirm_modal 의 $gray_4 · 8px 반경)을 따라 아래 "세로" 절에서 다시 잡는다.
+.pairing {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 64px 96px;
+
+    &__inner {
+        width: 100%;
+        max-width: 1560px;
+    }
+
+    &__title {
+        margin: 0;
+        font-size: 56px;
+        font-weight: 700;
+        line-height: 1.2;
+        color: $white_1;
+    }
+
+    &__lead {
+        margin: 20px 0 0;
+        max-width: 1100px;
+        font-size: 28px;
+        line-height: 1.5;
+        color: $gray_6;
+        word-break: keep-all;
+    }
+
+    // 좌(안내+코드)·우(QR) 두 패널. 높이를 맞춰 나란히 세운다.
+    &__body {
+        display: flex;
+        align-items: stretch;
+        gap: 56px;
+        margin-top: 56px;
+    }
+
+    &__panel {
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        background-color: $gray_4;
+    }
+
+    // QR 패널이 더 길어 stretch 로 늘어나므로, 내용을 세로 중앙에 두어 아래가 비지 않게 한다.
+    &__panel--steps {
+        flex: 1 1 auto;
+        padding: 48px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    // QR 패널의 폭은 QR 400px + qrBox 여백 40px + 패널 여백 80px 로 맞춘 값이다.
+    &__panel--qr {
+        flex: 0 0 auto;
+        width: 520px;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    &__list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    &__step {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+
+        & + & {
+            margin-top: 24px;
+        }
+    }
+
+    // 단계 번호를 원형 배지로 둔다. 본문 첫 줄(line-height 1.5 × 30px)과 중심이 맞는다.
+    &__num {
+        flex: 0 0 auto;
+        width: 46px;
+        height: 46px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background-color: rgba(162, 98, 255, 0.22);
+        font-size: 26px;
+        font-weight: 700;
+        color: #c9a4ff;
+    }
+
+    &__stepText {
+        font-size: 30px;
+        line-height: 1.5;
+        color: $gray_6;
+        word-break: keep-all;
+
+        // 주소는 사전 문자열의 {hl} 마커가 만드는 `.pairing__url` 로 들어온다(renderMessage).
+        // 요소 선택자(`b`)를 쓰지 않는 덕에 globals.scss 의 `b` 리셋(16px)에 걸리지 않는다.
+        .pairing__url {
+            font-size: 34px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: $white_1;
+        }
+    }
+
+    // 폰에 옮겨 적는 값이라 화면에서 가장 크고 또렷해야 한다.
+    &__code {
+        margin: 40px 0 24px;
+        padding: 28px 12px;
+        border: 2px solid rgba(162, 98, 255, 0.5);
+        border-radius: 20px;
+        background-color: rgba(162, 98, 255, 0.14);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 88px;
+        font-weight: 700;
+        letter-spacing: 12px;
+        line-height: 1.1;
+        text-align: center;
+        color: $white_1;
+    }
+
+    &__note {
+        margin: 0;
+        font-size: 22px;
+        line-height: 1.5;
+        color: $gray_cool;
+        word-break: keep-all;
+    }
+
+    // 폴링 진행과 남은 시간.
+    &__status {
+        display: flex;
+        align-items: baseline;
+        gap: 16px;
+        margin: 20px 0 0;
+        font-size: 22px;
+        line-height: 1.5;
+        color: $gray_cool;
+    }
+
+    // ⚠️ font-size 를 반드시 명시한다. globals.scss 의 리셋이 `span` 에 16px 을 직접 준다.
+    &__remaining {
+        font-size: 22px;
+        font-variant-numeric: tabular-nums;
+        color: $white_1;
+    }
+
+    &__qrTitle {
+        margin: 0 0 24px;
+        font-size: 26px;
+        font-weight: 600;
+        color: $white_1;
+    }
+
+    // QR 은 흰 바탕이 있어야 카메라가 읽는다. canvas 아래 줄바꿈 여백은 line-height 로 없앤다.
+    &__qrBox {
+        padding: 20px;
+        margin-bottom: 24px;
+        border-radius: 16px;
+        background: #fff;
+        line-height: 0;
+
+        canvas {
+            display: block;
+        }
+    }
+
+    // 오류·만료 안내. 대기 화면의 두 패널과 같은 카드 톤을 쓴다.
+    &__panel--notice {
+        display: inline-block;
+        margin-top: 56px;
+        padding: 48px;
+    }
+
+    &__msg {
+        margin: 0;
+        font-size: 30px;
+        line-height: 1.5;
+        color: $gray_6;
+        word-break: keep-all;
+    }
+
+    &__panel--notice &__note {
+        margin-top: 12px;
+    }
+
+    // 오류·만료 화면의 유일한 조작 지점.
+    &__retry {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 320px;
+        height: 96px;
+        margin-top: 40px;
+        padding: 0 48px;
+        border: 0;
+        border-radius: 16px;
+        background-color: $point_1;
+        font-size: 30px;
+        font-weight: 600;
+        color: $white_1;
+        cursor: pointer;
+    }
+}
+
+// 세로: 두 패널을 세로로 쌓고 모바일 활자 단계로 줄인다. 코드·QR 은 폰으로 옮겨야 하는 값이라
+// 본문보다 크게 남긴다(코드 40px, QR 240px — 840 폭 창에서 팔 길이 거리로 찍히는 크기).
+@include mobile {
+    .pairing {
+        align-items: flex-start;
+        padding: calc(56px + var(--aim-safe-top)) 24px 40px;
+
+        &__title {
+            font-size: 24px;
+            line-height: 1.35;
+        }
+        &__lead {
+            margin-top: 12px;
+            font-size: 15px;
+        }
+        &__body {
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 32px;
+        }
+        &__panel {
+            border-radius: 8px;
+        }
+        &__panel--steps {
+            padding: 24px 20px;
+        }
+        &__panel--qr {
+            width: auto;
+            padding: 24px 20px;
+        }
+        // ⚠️ mobile_style 이 `li` 를 float 로 띄워 두어 단계가 가로로 붙는다(840 실측). 풀어 준다.
+        &__step {
+            float: none;
+            gap: 12px;
+            & + & {
+                margin-top: 12px;
+            }
+        }
+        &__num {
+            width: 28px;
+            height: 28px;
+            font-size: 15px;
+        }
+        &__stepText {
+            font-size: 15px;
+            .pairing__url {
+                font-size: 17px;
+            }
+        }
+        &__code {
+            margin: 24px 0 12px;
+            padding: 16px 8px;
+            border-radius: 8px;
+            font-size: 40px;
+            letter-spacing: 6px;
+        }
+        &__note,
+        &__status,
+        &__remaining {
+            font-size: 13px;
+        }
+        &__status {
+            gap: 8px;
+            margin-top: 12px;
+        }
+        &__qrTitle {
+            margin-bottom: 16px;
+            font-size: 17px;
+        }
+        &__qrBox {
+            padding: 12px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+            // qrcode 가 canvas 에 인라인 width/height 를 박아 넣어 !important 로만 덮인다.
+            canvas {
+                width: 240px !important;
+                height: 240px !important;
+            }
+        }
+        &__panel--notice {
+            display: block;
+            margin-top: 32px;
+            padding: 24px 20px;
+        }
+        &__msg {
+            font-size: 15px;
+        }
+        // 주요 버튼 — 모바일 디자인의 `.btn_type1` 높이(48px)보다 한 단 크게(차량 터치 기준).
+        &__retry {
+            width: 100%;
+            min-width: 0;
+            height: 56px;
+            margin-top: 24px;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+    }
+}
+
+// ── 오류 문구(비밀번호 변경·탈퇴) — 세로·가로 공통 ──
+//
+// web_style·mobile_style 의 `.input_type1 .message` 는 회색이라 오류로 읽히지 않는다. 오류일 때만
+// 경고색($red_1)을 준다. 탈퇴 거부 안내(`.sheet_error`)는 web 에 없는 요소라 여기서 그린다.
+#contents.signup_page {
+    .input_type1 .message.error,
+    .form_message.error {
+        color: $red_1;
+    }
+    .form_message {
+        margin: 0 0 12px;
+        font-size: 14px;
+        line-height: 1.5;
+        text-align: center;
+    }
+}
+.withdraw_sheet .sheet_error {
+    margin: 0;
+    color: $red_1;
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+// 게스트 차단 화면(App.tsx 의 GuestGate)이 본문 대신 두는 빈 자리. 이 자리채움이 없으면
+// LayoutShell 의 푸터가 헤더 바로 아래로 올라붙어 화면 한가운데에 뜬다.
+.guest_gate_blank {
+    min-height: 100vh;
+}
+
+// ── 세로 터치 보정 ──
+//
+// ⚠️ 보이는 크기는 apps/web 모바일 원본 그대로 두고 **터치 영역만** 넓힌다. 원본 치수를 키우면
+// 세로 디자인이 apps/web 과 어긋난다(작업 원칙). 시청기록 삭제(X)는 26px 원이라 손가락으로 맞히기
+// 어려워, 상자를 48px 로 키우고 원은 같은 크기의 그라디언트로 다시 그린다(겉모습은 그대로).
+.watch_history_list .bg_area .btn_delete {
+    top: -3px;
+    right: -3px;
+    width: 48px;
+    height: 48px;
+    border-radius: 0;
+    background: radial-gradient(circle at center, rgba(0, 0, 0, 0.6) 12.5px, transparent 13px);
+}
+
+// 헤더 아이콘(햄버거 16×14·검색 24/32·마이페이지 32)도 같은 방식으로 터치 영역만 48×48 로 넓힌다.
+// 세 요소 모두 의사 요소를 쓰지 않아 `::after` 를 투명 히트 영역으로 쓸 수 있다(실측 2026-10-13).
+.header .ham_btn,
+.header .search_open_icon,
+.header .mypage_icon {
+    position: relative;
+
+    &::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 48px;
+        height: 48px;
+        transform: translate(-50%, -50%);
+    }
+}
+
+// ── 가로(= TV 디자인) 보정 ──
+//
+// 아래는 apps/tv 의 "TV 전용 보정"을 옮긴 것이다. apps/tv 는 미디어쿼리 밖에 두었지만, 이 앱은
+// 세로에서 mobile_style 이 같은 요소를 그리므로 **반드시 desktop(가로) 안에 둔다** — 밖에 두면
+// 순서상 mobile_style 뒤라 세로 디자인을 덮어 버린다.
+@include desktop {
+    // ── 비밀번호 변경 (/pwinquiry) — TV 거리에 맞춘 약 2배 치수(apps/tv 와 같다) ──
+    //
+    // ⚠️ `#contents` 를 붙여야 web 쪽 규칙(`.login_area h2`·`.input_type1 label` 등)보다
+    // 명시도가 앞선다(apps/tv README 함정 표 "TV 보정 CSS 가 먹지 않음").
+    #contents.signup_page {
+        .login_area > .wrap_type1 {
+            max-width: 936px;
+            padding: 80px 88px;
+            border-radius: 16px;
+        }
+
+        .login_area .panel_type4 {
+            max-width: 670px;
+        }
+
+        .login_area h2 {
+            font-size: 44px;
+            margin-bottom: 56px;
+        }
+
+        .input_type1 {
+            margin-top: 32px;
+
+            label {
+                padding: 0 0 10px 4px;
+                font-size: 26px;
+
+                span {
+                    margin-left: 10px;
+                    font-size: 20px;
+                }
+            }
+
+            input {
+                padding: 20px 32px;
+                border-radius: 16px;
+                font-size: 30px;
+            }
+
+            // `.pass` 는 눈 아이콘 자리로 오른쪽을 비워 두는데 그 아이콘이 그려지지 않는다.
+            &.pass input {
+                padding-right: 32px;
+            }
+
+            .message {
+                padding: 12px 0 0 8px;
+                font-size: 26px;
+                line-height: 1.5;
+            }
+        }
+
+        .form_message {
+            margin: 0 0 20px;
+            font-size: 26px;
+        }
+
+        // ⚠️ 공용 `.btn_type1` 이 `height: 48px` 를 박아 두어 padding 만으로는 높이가 늘지 않는다.
+        .btn_type1 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 96px;
+            padding: 0 32px;
+            border-radius: 16px;
+            font-size: 30px;
+        }
+
+        // `background` 단축 속성이 크기를 `48px 48px` 로 박아 두므로 `background-size` 로 덮는다.
+        .back_btn {
+            width: 72px;
+            height: 72px;
+            top: 32px;
+            left: 40px;
+            background-size: 72px 72px;
+        }
+    }
+
+    // ── 공용 확인 모달 — 데스크탑 기준(모달 360px · 본문 16px · 버튼 48px)의 2배(apps/tv 와 같다) ──
+    .confirm_modal_dimmed {
+        padding: 40px;
+    }
+
+    .confirm_modal {
+        max-width: 720px;
+        padding: 64px 48px;
+        border-radius: 16px;
+
+        .tit {
+            font-size: 36px;
+            margin-bottom: 16px;
+        }
+
+        .msg {
+            font-size: 32px;
+            margin-bottom: 48px;
+        }
+
+        .btns {
+            gap: 16px;
+
+            button {
+                height: 96px;
+                border-radius: 16px;
+                font-size: 30px;
+            }
+        }
+    }
+
+    // ── 회원 탈퇴 바텀시트 — 대략 2배(apps/tv 와 같다) ──
+    .withdraw_sheet {
+        gap: 48px;
+        padding: 72px 88px 104px;
+        border-radius: 16px 16px 0 0;
+
+        .sheet_title {
+            p {
+                font-size: 44px;
+                line-height: 1.35;
+            }
+            .btn_close {
+                width: 72px;
+                height: 72px;
+                &::before,
+                &::after {
+                    width: 36px;
+                    height: 3px;
+                }
+            }
+        }
+        .sheet_con {
+            gap: 56px;
+        }
+        .sheet_body {
+            gap: 28px;
+        }
+        .sheet_desc {
+            gap: 24px;
+            .tit {
+                font-size: 36px;
+                line-height: 1.35;
+            }
+            .txt {
+                font-size: 26px;
+                line-height: 1.5;
+            }
+        }
+        // web_style 이 `input[type=checkbox]:checked + label` 형태로 그리므로 같은 형태로 되풀이해야
+        // 특이도가 넘어선다.
+        .agree_checks .check_type1 {
+            padding: 12px 0;
+
+            input[type="checkbox"]:checked + label,
+            input[type="checkbox"]:not(:checked) + label {
+                font-size: 26px;
+                line-height: 1.5;
+                padding: 4px 6px;
+            }
+            input[type="checkbox"]:checked + label span,
+            input[type="checkbox"]:not(:checked) + label span {
+                width: 34px;
+                height: 34px;
+                margin-right: 14px;
+            }
+        }
+        .btn_withdraw {
+            height: 96px;
+            border-radius: 16px;
+            font-size: 30px;
+        }
+        .sheet_error {
+            font-size: 26px;
+        }
+    }
+
+    // ── 헤더 마이페이지 드롭다운 — 탭으로 연다 ──
+    // TV web_style 은 `:hover` 로만 연다. 터치에는 hover 가 없어 Header 가 `.on` 을 토글한다.
+    .header .right .mypage_area.on .mypage_menu {
+        display: block;
+    }
+
+    // ── 푸터(가로) — apps/web web_style 의 현재 구조(f_top/f_bottom + 사업자 정보) ──
+    //
+    // apps/tv 의 web_style 은 옛 푸터(좌측 로고 절대배치 + 우측 메뉴, 사업자 정보 없음) 기준이다.
+    // Footer.tsx 를 apps/web 의 현재 마크업으로 맞췄으므로 그 배치 규칙을 apps/web 에서 옮기고,
+    // 옛 규칙의 절대배치·float 를 풀어 준다. 색·글자 크기는 TV web_style 값을 그대로 둔다.
+    .footer {
+        padding: 120px 0 144px;
+
+        > .wrap_type1 {
+            padding: 0 68px 0 24px;
+        }
+        .f_top {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row-reverse;
+            .left {
+                position: static;
+                float: none;
+                width: calc(100% - 584px);
+                max-width: 1190px;
+                height: auto;
+                display: flex;
+                flex-wrap: wrap;
+                align-content: flex-start;
+            }
+            .right {
+                float: none;
+                width: 584px;
+                max-width: none;
+                padding-bottom: 0;
+            }
+        }
+        .f_bottom {
+            margin-top: 48px;
+            .info {
+                display: flex;
+                flex-wrap: wrap;
+                p {
+                    line-height: 1.5;
+                    color: $gray_11;
+                    &:after {
+                        content: "|";
+                        margin: 0 8px;
+                    }
+                    &:last-child:after {
+                        display: none;
+                    }
+                }
+            }
+            .copy {
+                font-weight: 600;
+                line-height: 1;
+                color: $gray_11;
+                margin-top: 16px;
+            }
+        }
+    }
+}
+
+// ── 재생 화면 (/play) — 웹 폴백 플레이어 ──
+//
+// 차량 실사용 재생은 네이티브 Media3 가 맡는다(src/native/playback.ts). 이 화면은 브라우저 개발
+// 환경과 브릿지 실패 시의 폴백이다. 헤더/푸터는 LayoutShell 이 `/play` 에서 숨긴다.
+.web_player {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    overflow: hidden;
+
+    // 어댑터가 이 안에 `<video>` 를 심는다.
+    &__stage {
+        position: absolute;
+        inset: 0;
+    }
+
+    &__video {
+        display: block;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        // 비율을 지키며 화면 안에 맞춘다(여백은 플레이어 안의 검은 영역 — 앱 창은 구역을 그대로 채운다).
+        object-fit: contain;
+    }
+
+    &__controls {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    &__topbar {
+        padding: 40px 56px;
+    }
+
+    &__bottombar {
+        padding: 40px 56px 56px;
+        // 아래로 갈수록 어둡게 — 밝은 장면에서도 글자가 읽히게.
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0));
+    }
+
+    &__title {
+        margin: 0;
+        font-size: 40px;
+        font-weight: 700;
+    }
+
+    &__subtitle {
+        margin: 8px 0 0;
+        font-size: 24px;
+        opacity: 0.75;
+    }
+
+    &__progress {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin: 28px 0 24px;
+    }
+
+    &__time {
+        min-width: 104px;
+        font-size: 22px;
+        font-variant-numeric: tabular-nums;
+    }
+
+    &__bar {
+        position: relative;
+        flex: 1;
+        height: 8px;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.28);
+        overflow: hidden;
+    }
+
+    &__bar_fill {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        border-radius: 4px;
+        background: #ffd400;
+    }
+
+    &__buttons {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    // 터치 버튼. 높이 64px(주요 버튼 72px) — 차량 터치 기준 48px 을 넉넉히 넘긴다.
+    &__btn,
+    &__back {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 64px;
+        padding: 0 32px;
+        border: 0;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.14);
+        color: $white_1;
+        font-size: 24px;
+        cursor: pointer;
+
+        span {
+            font-size: inherit;
+            color: inherit;
+        }
+    }
+
+    &__btn--main {
+        min-width: 200px;
+        min-height: 72px;
+        background: rgba(255, 255, 255, 0.26);
+        font-weight: 700;
+    }
+
+    &__back {
+        background: rgba(0, 0, 0, 0.55);
+    }
+
+    &__buffering {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: 3;
+        transform: translate(-50%, -50%);
+        margin: 0;
+        font-size: 28px;
+        pointer-events: none;
+    }
+
+    &__fallback {
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 28px;
+        padding: 0 24px;
+        text-align: center;
+    }
+
+    &__fallback_msg {
+        margin: 0;
+        font-size: 30px;
+    }
+}
+
+// 세로: 모바일 활자 단계로 줄인다. 버튼은 터치 기준(48px↑)을 유지한다.
+@include mobile {
+    .web_player {
+        &__topbar {
+            padding: calc(16px + var(--aim-safe-top)) 16px 16px;
+        }
+        &__bottombar {
+            padding: 24px 16px 32px;
+        }
+        &__title {
+            font-size: 20px;
+        }
+        &__subtitle {
+            font-size: 14px;
+        }
+        &__progress {
+            gap: 12px;
+            margin: 16px 0;
+        }
+        &__time {
+            min-width: 56px;
+            font-size: 13px;
+        }
+        &__bar {
+            height: 4px;
+        }
+        &__buttons {
+            justify-content: center;
+            gap: 12px;
+        }
+        &__btn,
+        &__back {
+            min-height: 52px;
+            padding: 0 20px;
+            font-size: 15px;
+        }
+        &__btn--main {
+            min-width: 120px;
+            min-height: 56px;
+        }
+        &__buffering,
+        &__fallback_msg {
+            font-size: 16px;
+        }
+    }
+}

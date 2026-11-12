@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 운영: CMS·CDN 모두 HTTPS 라 평문을 허용하지 않는다. debug 소스셋이 같은 이름으로 덮어쓴다. -->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false" />
+</network-security-config>

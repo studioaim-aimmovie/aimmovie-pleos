@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Compose 가 화면을 그리기 전 창 배경. 첫 프레임 전에 흰 화면이 번쩍이지 않게 앱 배경색과 맞춘다. -->
+    <style name="Theme.AimMovie" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/background</item>
+        <item name="android:colorBackground">@color/background</item>
+        <item name="android:statusBarColor">@color/background</item>
+        <item name="android:navigationBarColor">@color/background</item>
+    </style>
+</resources>
