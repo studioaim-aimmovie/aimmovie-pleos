@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit
 /**
  * 수동 DI 컨테이너. Application 이 하나를 보유하고 셸(MainActivity)·플레이어(PlayerActivity)가 여기서 의존성을 꺼낸다.
  *
- * Hilt 같은 프레임워크를 쓰지 않는 이유: 웹 셸 전환 뒤 의존 그래프가 더 작아졌고(토큰·재생 API·플레이어 정도),
+ * Hilt 같은 프레임워크를 쓰지 않는 이유: 의존 그래프가 작고(토큰·재생 API·플레이어 정도),
  * 애노테이션 처리(kapt/ksp)로 빌드 시간과 설정을 늘리는 것보다 생성자 주입을 한곳에 적는 편이 읽기 쉽다.
  */
 class AppContainer(context: Context) {

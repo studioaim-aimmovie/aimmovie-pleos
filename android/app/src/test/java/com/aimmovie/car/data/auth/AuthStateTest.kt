@@ -13,7 +13,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-/** apps/tv/src/auth/{AuthContext.tsx,tokenStore.ts,guestPolicy.ts} */
+/** web/src/auth/{AuthContext.tsx,tokenStore.ts,guestPolicy.ts} */
 @OptIn(ExperimentalCoroutinesApi::class)
 class AuthStateTest {
     private val user = StoredUser(id = "u1", name = "n")
@@ -45,7 +45,7 @@ class AuthStateTest {
         assertEquals(AuthState.LoggedOut, repo.state.value)
         assertFalse(repo.isLoggedIn)
 
-        // 페어링이 토큰을 저장하는 순간 로그인 상태가 된다(TV 의 refresh() 호출이 필요 없다)
+        // 페어링이 토큰을 저장하는 순간 로그인 상태가 된다
         store.setTokens(AuthTokens("a", "r", Long.MAX_VALUE, user))
         assertEquals(AuthState.LoggedIn(user), repo.state.value)
         assertEquals(user, repo.user)

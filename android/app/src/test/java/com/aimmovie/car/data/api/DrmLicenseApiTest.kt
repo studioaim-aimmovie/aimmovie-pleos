@@ -29,7 +29,7 @@ import org.junit.Test
 import java.util.concurrent.TimeUnit
 
 /**
- * 라이선스 요청 형식 — mobile/lib/services/drm_license_api.dart · docs/DRM_FRONTEND_HANDOFF.md §1 과 같은 계약인지
+ * 라이선스 요청 형식이 CMS 계약과 맞는지
  * 실제 HTTP(MockWebServer)로 확인한다. 인증은 ApiClient(Bearer + 401 시 refresh 1회)를 거친다.
  */
 class DrmLicenseApiTest {
@@ -73,7 +73,7 @@ class DrmLicenseApiTest {
         assertEquals("Bearer access-1", req.getHeader("Authorization"))
         assertTrue(req.getHeader("Content-Type")!!.startsWith("application/json"))
         val body = AppJson.parseToJsonElement(req.body.readUtf8()) as JsonObject
-        // 모바일과 같은 필드(video·drmType·deviceType:'app'). 사용자 식별은 body.user 가 아니라 Bearer 로 한다(DrmLicenseApi 주석).
+        // 필드(video·drmType·deviceType:'app'). 사용자 식별은 body.user 가 아니라 Bearer 로 한다(DrmLicenseApi 주석).
         assertEquals(mapOf("video" to "video-1", "drmType" to "Widevine", "deviceType" to "app"), body.mapValues { (it.value as JsonPrimitive).content })
         assertFalse(body.containsKey("user"))
 
@@ -106,7 +106,7 @@ class DrmLicenseApiTest {
     fun non200_andMissingFields_areFailures() = runBlocking {
         respond("""{"result":true}""", status = 500)
         assertTrue(api.fetchLicense("video-1") is DrmLicenseResult.Failed)
-        // 원본: token·license_url·header 중 하나라도 비면 형식 오류.
+        // token·license_url·header 중 하나라도 비면 형식 오류.
         respond("""{"result":true,"token":"t","license_url":"https://l"}""")
         assertTrue(api.fetchLicense("video-1") is DrmLicenseResult.Failed)
         respond("not json")

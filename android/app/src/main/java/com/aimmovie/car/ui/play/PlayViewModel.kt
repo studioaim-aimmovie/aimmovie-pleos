@@ -1,11 +1,7 @@
-// 원본: apps/tv/src/routes/Play.tsx (콘텐츠 조회 → resolvePlaySetup → 플레이어 생성·진행률 저장·다음 회차),
-//       mobile/lib/pages/player_page.dart (DRM 이면 라이선스 발급 → Widevine DASH)
-//
-// 재생 화면 상태. 플레이어는 PlayerHolder(앱 수명)에서 빌려 쓰고 이 ViewModel 이 사라질 때 돌려준다 —
+// 재생 화면 상태(콘텐츠 조회 → resolvePlaySetup → DRM 이면 라이선스 발급 → 플레이어 생성·진행률 저장·다음 회차). 플레이어는 PlayerHolder(앱 수명)에서 빌려 쓰고 이 ViewModel 이 사라질 때 돌려준다 —
 // ViewModel 은 구역 전환(Configuration 변경, Activity 재생성 없음)에도 남으므로 재생이 끊기지 않는다.
 // 화면은 웹 셸(MainActivity) 위에 뜨는 PlayerActivity 다. 웹이 브릿지 `play` 로 넘긴 요청, 또는 재실행 복원이 저장해 둔 요청으로 연다.
 //
-// TV 와 다른 점:
 //  - 다음 회차를 라우트 교체(router.replace)가 아니라 같은 화면에서 소스만 바꿔 연다. 플레이어·세션을 새로 만들지 않아
 //    "화면 두 개가 잠깐 겹치며 플레이어 두 개가 존재"하는 구간이 생기지 않는다(Pleos 동시 다중 스트림 금지).
 //  - 재실행 복원을 위해 재생 위치를 ShellStateStore 에 주기적으로 적는다(RouteCheckpoint). 정상적으로 닫으면 지운다.
@@ -88,7 +84,7 @@ sealed interface PlayPhase {
 
 data class PlayUiState(
     val phase: PlayPhase = PlayPhase.Loading,
-    /** 제목은 화면이 표시 언어로 고른다(언어가 바뀌어도 재조회·재생 중단이 없게 — TV 주석과 같은 취지). */
+    /** 제목은 화면이 표시 언어로 고른다(언어가 바뀌어도 재조회·재생 중단이 없게). */
     val titles: LocalizedText = LocalizedText(),
     val season: Int? = null,
     val episode: Int? = null,
@@ -160,7 +156,7 @@ class PlayViewModel(
             _state.update { it.copy(playing = isPlaying) }
         }
 
-        // 일시정지(화면 버튼·시스템 미디어 컨트롤·오디오 포커스 상실 모두) 시점에 보고한다(원본 onPause → saveProgress).
+        // 일시정지(화면 버튼·시스템 미디어 컨트롤·오디오 포커스 상실 모두) 시점에 보고한다.
         override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
             _state.update { it.copy(paused = !playWhenReady) }
             if (!playWhenReady) saveNow()
@@ -280,7 +276,7 @@ class PlayViewModel(
     val currentPositionMs: Long get() = player.currentPosition.coerceAtLeast(0)
 
     override fun onCleared() {
-        // 화면 이탈 직전 위치를 저장한 뒤 파기한다(원본 이펙트 cleanup). 전송은 앱 스코프라 끝까지 간다.
+        // 화면 이탈 직전 위치를 저장한 뒤 파기한다. 전송은 앱 스코프라 끝까지 간다.
         reporter.save(positionSec(), durationSec())
         player.removeListener(listener)
         playerHolder.release(this)
@@ -363,7 +359,7 @@ class PlayViewModel(
                         .setDrmConfiguration(
                             MediaItem.DrmConfiguration.Builder(C.WIDEVINE_UUID)
                                 .setLicenseUri(r.license.licenseUrl)
-                                // DoveRunner 토큰을 응답이 알려 준 헤더에 싣는다(모바일 BetterPlayerDrmConfiguration.headers 와 같다).
+                                // DoveRunner 토큰을 응답이 알려 준 헤더에 싣는다.
                                 .setLicenseRequestHeaders(mapOf(r.license.headerName to r.license.token))
                                 .build(),
                         )
@@ -393,7 +389,7 @@ class PlayViewModel(
 
     private fun title(c: Content): String = Contents.resolveText(c.titles, locale)
 
-    /** 종료: 완료값 강제 저장 + 다음 회차(TV handleEndedImpl). */
+    /** 종료: 완료값 강제 저장 + 다음 회차. */
     private fun handleEnded() {
         updatePosition()
         reporter.markEnded(durationSec())
@@ -445,7 +441,7 @@ class PlayViewModel(
 
     private fun positionSec(): Double = player.currentPosition.coerceAtLeast(0) / 1000.0
 
-    /** CMS stream.duration 우선(원본과 같다 — 종료 시 이 값으로 저장해 진행바가 정확히 100% 가 되게 한다). */
+    /** CMS stream.duration 우선(종료 시 이 값으로 저장해 진행바가 정확히 100% 가 되게 한다). */
     private fun durationSec(): Double {
         val cms = setup?.video?.stream?.duration ?: 0.0
         if (cms > 0) return cms

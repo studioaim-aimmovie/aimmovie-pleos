@@ -1,13 +1,10 @@
-// 새 비밀번호 설정 — apps/tv 의 pwwrap 에서 옮겼다(원본: apps/web components/common/pwwrap.tsx).
-//
-// web 과 다른 점이 넷 있다(셋은 apps/tv 와 같다).
+// 새 비밀번호 설정.
 //
 // 1. **리셋 토큰 흐름이 없다.** 로그인 자체가 디바이스 페어링이라 "비밀번호 찾기" 흐름이 없고,
 //    이 화면은 마이페이지에서만 들어온다. 그래서 로그인 상태 변경만 다룬다.
-// 2. **전송 경로가 다르다.** web 은 자체 프록시 `/join/pass` 를 쓰지만 이 앱은 CMS 로 직접
-//    보낸다(@aim/core 의 changePassword — apiClient 가 Bearer 를 붙인다).
+// 2. **CMS 로 직접 보낸다**(@aim/core 의 changePassword — apiClient 가 Bearer 를 붙인다).
 // 3. **화면 키보드 입력이다.** 값은 제어 상태로 들고 있는다 — IME·화면 키보드가 값을 넣는
-//    방식이 기기마다 달라 비제어 폼으로 읽으면 빈 값이 잡히는 일이 있다(apps/tv 실측).
+//    방식이 기기마다 달라 비제어 폼으로 읽으면 빈 값이 잡히는 일이 있다.
 // 4. **`window.alert` 을 쓰지 않는다.** WebView 셸이 alert 를 삼킬 수 있어
 //     - 입력값 검사 실패는 각 입력칸 **아래에 빨간 문구**로 띄우고,
 //     - 서버 응답 실패는 버튼 위에 같은 방식으로 띄우며,
@@ -23,8 +20,6 @@ import { useT } from "@/i18n/LocaleProvider";
 import { cn } from "@/lib/cn";
 
 // 8~20자, 영문·숫자·특수문자를 모두 포함하고 공백이 없어야 한다.
-// apps/web 의 pwwrap.tsx 와 **같은 정규식**이다 — 한쪽만 고치면 플랫폼마다 통과 기준이
-// 달라지므로 함께 고칠 것.
 const PW_RULE = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=[{\]};:'",<.>/?\\|`~]).{8,20}$/;
 
 // 검사에 실패하면 고쳐야 하는 칸으로 포커스를 옮겨 화면 키보드를 바로 띄운다.
@@ -85,7 +80,7 @@ export default function PwWrap() {
     };
 
     // 비밀번호가 바뀌었어도 이 기기의 토큰은 그대로 유효하다. 로그아웃시키지 않고
-    // 들어온 자리로 되돌린다(web 은 /login 으로 보내지만 이 앱에는 그 화면이 없다).
+    // 들어온 자리로 되돌린다.
     const finishDone = () => {
         setDoneOpen(false);
         setPassword("");
@@ -119,7 +114,7 @@ export default function PwWrap() {
                                         setErrors((prev) => ({ ...prev, password: undefined }));
                                 }}
                             />
-                            {/* web 과 같은 마크업을 유지한다 — `.input_type1 .message` 스타일이
+                            {/* 이 마크업을 유지한다 — `.input_type1 .message` 스타일이
                                 이 구조에 걸려 있다. 오류가 없으면 빈 문단이라 아무것도 보이지 않는다. */}
                             <p className={cn("message", errors.password && "error")}>
                                 {errors.password ?? ""}

@@ -1,5 +1,5 @@
 // 팝콘 내역 클라이언트 헬퍼.
-// 백엔드 /authapi/popcorn/history (프록시 /api/popcorn/history).
+// 백엔드 /authapi/popcorn/history (논리 경로 /api/popcorn/history).
 
 import type { LocalizedText } from "../types/contents";
 import { resolveText } from "../domain/contents";

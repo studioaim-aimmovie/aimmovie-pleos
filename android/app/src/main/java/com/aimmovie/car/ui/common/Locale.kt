@@ -13,5 +13,5 @@ fun displayLocale(requested: String = "", locale: Locale = Locale.getDefault()):
     else -> if (locale.language == "en") "en" else "ko"
 }
 
-/** 편성/시장 국가(?country=). 게스트는 KR, 로그인 사용자는 country_code(원본 useMarketCountry). */
+/** 편성/시장 국가(?country=). 게스트는 KR, 로그인 사용자는 country_code(web/src/hooks/useMarketCountry.ts 와 같다). */
 fun AuthRepository.marketCountry(): String = Country.resolveCountry(user?.countryCode)

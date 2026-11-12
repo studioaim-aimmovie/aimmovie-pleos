@@ -1,7 +1,7 @@
-// apps/pleos 진입점.
+// 앱 진입점.
 //
 // 여기서 하는 일은 두 가지다.
-//  1) @aim/core 환경 주입 — core 는 환경변수를 직접 읽지 않는다(Next 와 Vite 의 env 방식이 다르다).
+//  1) @aim/core 환경 주입 — core 는 환경변수를 직접 읽지 않는다.
 //  2) HashRouter 마운트.
 
 import { StrictMode } from "react";

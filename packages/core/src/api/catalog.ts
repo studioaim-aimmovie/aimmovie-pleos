@@ -1,8 +1,5 @@
 // 공개(비인증) 카탈로그 조회.
 //
-// 지금까지 각 페이지(app/page.tsx, contents/[id], list/[type], search)가 같은 형태의
-// fetch 를 저마다 복붙해 갖고 있었다. apps/tv 도 같은 조회가 필요해 여기로 모은다.
-//
 // 인증이 필요 없으므로 authFetch 를 타지 않고 apiRoot 로 직접 요청한다.
 // (인증이 필요한 호출은 api/likeStatus·videoStatus·popcorn 쪽이다)
 
@@ -10,7 +7,7 @@ import { apiRoot } from "../config";
 import type { ContentShowResponse } from "../types/contents";
 import type { MainShowResponse } from "../types/main";
 
-/** 편성/검색 조회는 항상 최신을 받는다 — TV는 캐시된 편성이 오래 남으면 티가 크다. */
+/** 편성/검색 조회는 항상 최신을 받는다. */
 const NO_CACHE: RequestInit = { cache: "no-cache" };
 
 async function getJson<T>(url: string): Promise<T> {

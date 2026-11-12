@@ -1,7 +1,7 @@
-// 페어링 로그인 화면. apps/tv 의 DevicePairing 에서 옮겼다.
+// 페어링 로그인 화면.
 //
 // 차량 화면은 코드만 표시하고, 실제 인증은 이미 로그인된 폰/PC에서 한다
-// (정차 중이라도 차량 화면에서 아이디·비밀번호를 치게 하지 않는다 — 네이티브 차량 앱과 같은 방식).
+// (정차 중이라도 차량 화면에서 아이디·비밀번호를 치게 하지 않는다).
 //
 //  1) POST /authapi/device/code  → user_code 표시 + QR
 //  2) 사용자가 폰에서 승인
@@ -21,8 +21,6 @@ import { useT } from "../i18n/LocaleProvider";
 
 /**
  * 페어링 요청의 platform 값. CMS 는 이 값을 자유 문자열로 저장해 기기 목록에 보여 준다.
- * 네이티브 차량 앱(car/pleos 의 DevicePairing.PLATFORM)과 같은 값을 써서, 셸이 웹이든
- * 네이티브든 CMS 에서는 같은 "차량" 기기로 보이게 한다.
  */
 const PAIRING_PLATFORM = "pleos";
 
@@ -40,7 +38,7 @@ type Phase = "loading" | "waiting" | "expired" | "error";
 
 /**
  * 기기 이름 키 — 승인 화면에서 "무엇을 로그인시키는지" 알아볼 수 있게 보낸다.
- * core 사전에는 TV 이름뿐이라, generic 키를 차량 문구로 덮어써서 쓴다(i18n/pleosMessages.ts).
+ * generic 키를 차량 문구로 덮어써서 쓴다(i18n/pleosMessages.ts).
  */
 const DEVICE_NAME_KEY: MessageKey = "tv.device_generic";
 

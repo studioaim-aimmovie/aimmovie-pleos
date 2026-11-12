@@ -2,7 +2,7 @@
 //
 // 왜 Composable·ViewModel 밖(AppContainer)에 두는가:
 //  - Pleos 는 동시 다중 스트림을 금지한다. 재생 화면이 겹쳐 열리는 순간(다음 회차 전환 등)에도 디코더를 둘 쓰지 않도록
-//    인스턴스를 한곳에서만 만든다(TV 의 단일 하드웨어 디코더 문제와 같은 취지 — apps/tv/src/routes/Play.tsx 주석).
+//    인스턴스를 한곳에서만 만든다.
 //  - 시스템 미디어 컨트롤은 PlaybackService(MediaSessionService)가 이 세션을 내보여 처리한다. 서비스와 화면이
 //    같은 플레이어를 보려면 둘 다 꺼낼 수 있는 앱 수명 객체가 갖고 있어야 한다.
 //
@@ -75,7 +75,7 @@ class PlayerHolder(context: Context) {
 
     companion object {
         private const val TAG = "AimPlayer"
-        /** 되감기/빨리감기 한 번의 이동량(TV Controls.tsx SEEK_STEP_SEC = 10). */
+        /** 되감기/빨리감기 한 번의 이동량(web/src/player/Controls.tsx 의 SEEK_STEP_SEC 와 같다). */
         const val SEEK_STEP_MS = 10_000L
     }
 }

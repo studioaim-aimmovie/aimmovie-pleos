@@ -1,7 +1,4 @@
-// 회사 소개 — apps/web 의 components/sub/about_wrap.tsx 를 그대로 옮겼다(import·이미지 경로만 바꿨다).
-//
-// apps/tv 는 리모컨으로 스크롤 진행도를 만들 수 없어 단계 전환식으로 다시 짰지만, 차량은 터치
-// 스크롤이라 web 의 스크롤 연동 연출(.scene_sticky)이 그대로 성립한다. 세로·가로 모두 web 과 같다.
+// 회사 소개. 터치 스크롤이라 스크롤 연동 연출(.scene_sticky)을 세로·가로 모두 쓴다.
 import { useEffect, useRef } from "react";
 import { useMotionObserver } from "@/components/useMotionObserver";
 import Footer from "@/components/Footer";
@@ -86,7 +83,7 @@ export default function AboutWrap() {
 
     return (
         <div className="about_inner">
-            {/* 배경 그라디언트 — 위치/블러는 원본 유지, fill 색상만 천천히 전환 */}
+            {/* 배경 그라디언트 — fill 색상만 천천히 전환 */}
             <div className="bg_gradient" aria-hidden="true">
                 <svg
                     viewBox="0 0 3031 1498"
@@ -154,7 +151,7 @@ export default function AboutWrap() {
                 스크롤 진행도에 따라 한 번에 하나씩 .on → 크로스페이드 교체. 2번 문구부터 배경 #151a23. */}
             <div className="scene" ref={sceneRef}>
                 <div className="scene_sticky">
-                    {/* 어두운 배경 하단 블러 글로우(원본 디자인) — .dark일 때 함께 노출 */}
+                    {/* 어두운 배경 하단 블러 글로우 — .dark일 때 함께 노출 */}
                     <div className="scene_glow" aria-hidden="true" />
                     <p className="phrase stage_light">{renderMessage(t("about.scene1"), "pt")}</p>
                     <p className="phrase stage_dark bg_switch">

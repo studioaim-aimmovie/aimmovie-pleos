@@ -1,4 +1,4 @@
-// 웹 브릿지 v2 의 토큰 메서드(방식 A — 네이티브가 토큰을 소유·갱신한다). 짝: apps/pleos src/auth/{tokenStore,apiClient}.ts
+// 웹 브릿지 v2 의 토큰 메서드(방식 A — 네이티브가 토큰을 소유·갱신한다). 짝: web/src/auth/{tokenStore,apiClient}.ts
 //
 // 왜 네이티브가 정본인가: CMS refresh 토큰은 회전형이라 웹과 네이티브가 각자 refresh 하면 한쪽이 "이미 회전된 토큰
 // 재사용"으로 판정돼 family 전체가 폐기된다. 재생 중(DRM 라이선스·30초 이어보기 보고)에도 네이티브가 스스로 갱신해야

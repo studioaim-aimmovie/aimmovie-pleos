@@ -10,8 +10,7 @@
  * | MSE 없음 | `html5` | 네이티브 HLS 에 맡기는 마지막 폴백 |
  *
  * ⚠️ `canPlayType("application/vnd.apple.mpegurl")` 로 갈라서는 **안 된다.**
- * Chrome(데스크탑)은 실제로 HLS 를 재생하지 못하면서 `"maybe"` 를 돌려준다 — TV 앱에서 실측한
- * 함정이다. MSE 지원 여부(`Hls.isSupported()`)만 본다.
+ * Chrome(데스크탑)은 실제로 HLS 를 재생하지 못하면서 `"maybe"` 를 돌려준다. MSE 지원 여부(`Hls.isSupported()`)만 본다.
  */
 
 import { createHlsJsPlayer, isHlsJsSupported } from "./hlsjs";

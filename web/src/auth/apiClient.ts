@@ -1,9 +1,7 @@
-// 차량 앱의 인증 호출 전송자. apps/tv 의 apiClient 에서 옮겼다.
+// 차량 앱의 인증 호출 전송자.
 //
 // @aim/core 의 api/* 는 `/api/likestatus/mylist` 같은 **논리 경로**를 호출한다.
-// web/mobile 에서는 그 경로가 그대로 Next 프록시 경로이고, 프록시가 세션 쿠키를
-// CMS Bearer 로 바꿔 준다. 이 앱은 APK 안 WebView 에서 패키지 파일로 떠 Next 프록시가 없고
-// 쿠키도 쓸 수 없으므로(TV 와 같은 처지) 여기서 CMS로 직접 보낸다.
+// 이 앱은 APK 안 WebView 에서 패키지 파일로 떠 쿠키를 쓸 수 없으므로 여기서 CMS로 직접 보낸다.
 //
 //   /api/likestatus/mylist  →  {CMS}/authapi/likestatus/mylist  + Authorization: Bearer
 //

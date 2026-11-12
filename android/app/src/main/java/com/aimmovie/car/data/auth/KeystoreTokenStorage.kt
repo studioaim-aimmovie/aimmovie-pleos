@@ -1,5 +1,3 @@
-// 원본: apps/tv/src/auth/tokenStore.ts 의 readRaw / writeRaw (localStorage)
-//
 // 토큰 JSON 을 Android Keystore 의 AES-256-GCM 키로 암호화해 DataStore(Preferences)에 저장한다.
 //
 // EncryptedSharedPreferences 를 쓰지 않은 이유:
@@ -47,7 +45,7 @@ class KeystoreTokenStorage(context: Context) : TokenStorage {
                 if (value == null) prefs.remove(KEY_TOKENS) else prefs[KEY_TOKENS] = encrypt(value)
             }
         } catch (_: Exception) {
-            // 저장 실패는 조용히 무시 — 메모리 캐시로는 세션이 유지된다(TV 와 같은 정책).
+            // 저장 실패는 조용히 무시 — 메모리 캐시로는 세션이 유지된다.
         }
     }
 

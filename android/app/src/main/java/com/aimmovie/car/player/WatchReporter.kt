@@ -1,11 +1,10 @@
-// 원본: apps/web/components/player/player.tsx 의 saveProgress, apps/tv/src/routes/Play.tsx 의 saveProgress · handleEndedImpl
+// 짝: web/src/routes/Play.tsx 의 saveProgress · handleEndedImpl
 //
 // 이어보기(videostatus/play) 보고 시점 판정. 플레이어 객체 없이 "지금 위치·길이"만 받아 보낼지 정한다 —
-// 그래서 단위 테스트로 원본 규칙(중복 방지·완료 후 덮어쓰기 금지·미로그인 미전송)을 그대로 확인할 수 있다.
+// 그래서 단위 테스트로 규칙(중복 방지·완료 후 덮어쓰기 금지·미로그인 미전송)을 그대로 확인할 수 있다.
 //
-// 보고 시점(원본과 같다): 일시정지 / 종료(완료값 강제) / 화면 이탈 / 백그라운드 전환.
-// 원본에 없는 것: 재생 중 주기 보고([periodicMs]). 원본(web·TV·모바일)에는 주기 보고가 없다 — 브라우저는 pagehide 가
-// 마지막 기회를 주지만, Pleos 는 기어를 P 에서 빼는 순간 앱 프로세스를 종료해 아무 콜백도 오지 않는다.
+// 보고 시점: 일시정지 / 종료(완료값 강제) / 화면 이탈 / 백그라운드 전환 / 재생 중 주기 보고([periodicMs]).
+// 주기 보고를 두는 이유 — 브라우저는 pagehide 가 마지막 기회를 주지만, Pleos 는 기어를 P 에서 빼는 순간 앱 프로세스를 종료해 아무 콜백도 오지 않는다.
 // 그때 잃는 시청 위치를 줄이려고 30초마다 보낸다(서버 쓰기 부담과 손실 폭의 절충. 같은 초는 다시 보내지 않는다).
 package com.aimmovie.car.player
 
@@ -66,7 +65,7 @@ class WatchReporter(
         return save(positionSec, durationSec)
     }
 
-    /** 끝까지 봤다. 영상 길이(올림)로 강제 저장해 진행바가 정확히 100% 가 되게 한다(원본 force: Math.ceil(full)). */
+    /** 끝까지 봤다. 영상 길이(올림)로 강제 저장해 진행바가 정확히 100% 가 되게 한다. */
     fun markEnded(durationSec: Double): Boolean {
         ended = true
         return save(durationSec, durationSec, force = ceil(durationSec))

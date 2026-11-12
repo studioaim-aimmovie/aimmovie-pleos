@@ -1,13 +1,13 @@
-# AimMovie — Pleos Connect 차량 앱 (독립 빌드 패키지)
+# AimMovie — Pleos Connect 차량 앱
 
-`aim_movie_mono` 에서 Pleos 차량 앱을 빌드·실행하는 데 필요한 파일만 복사해 온 폴더다. 모노레포 없이 이 폴더만으로 빌드된다.
+Pleos Connect 차량 앱(`com.aimmovie.car`)을 빌드·실행하는 저장소다.
 
-| 폴더 | 원본(aim_movie_mono) | 내용 |
-|---|---|---|
-| `web/` | `apps/pleos` | 화면 — Vite React SPA(`@aim/pleos`). APK assets 에 실려 WebView 로 뜬다 |
-| `packages/core/` | `packages/core` | `web/` 이 쓰는 비-UI 계층(도메인·API·i18n, `@aim/core`) |
-| `android/` | `car/pleos/AimMovie` | 하이브리드 셸 — WebView + 네이티브 재생(Media3)·DRM·토큰 저장 |
-| `scripts/stage-web.sh` | `car/pleos/scripts/stage-web.sh` | 웹 빌드 → `android/app/src/<빌드 타입>/assets` 스테이징 |
+| 폴더 | 내용 |
+|---|---|
+| `web/` | 화면 — Vite React SPA(`@aim/pleos`). APK assets 에 실려 WebView 로 뜬다 |
+| `packages/core/` | `web/` 이 쓰는 비-UI 계층(도메인·API·i18n, `@aim/core`) |
+| `android/` | 하이브리드 셸 — WebView + 네이티브 재생(Media3)·DRM·토큰 저장 |
+| `scripts/stage-web.sh` | 웹 빌드 → `android/app/src/<빌드 타입>/assets` 스테이징 |
 
 ## 준비물
 
@@ -45,10 +45,7 @@
 두 파일을 반드시 빼고(`.gitignore` 에는 이미 들어 있다), 원본은 별도 보안 저장소에 백업해 둔다.
 두 파일이 없으면 release APK 가 debug 키로 서명되므로 제출하면 안 된다(`key.properties.example` 참고).
 
-## 원본과의 차이
+## 문서
 
-- `web/package.json` 에 `clsx`·`tailwind-merge` 를 추가했다. 모노레포에서는 다른 앱의 의존성이 루트로 끌어올려져 선언 없이 동작했다.
-- 루트 `package.json`(워크스페이스 `web`, `packages/*`)과 이 폴더 전용 `package-lock.json` 을 새로 만들었다.
-- 스크립트의 경로를 이 폴더 기준으로 바꿨다. 빌드 동작(모드별 CMS, env 가드, 신선도 가드)은 원본과 같다.
-- 소스 주석에 남은 `apps/pleos`·`packages/core`·`car/pleos` 경로는 원본 모노레포 위치를 가리킨다.
-- 자세한 구조·브릿지 계약은 `web/README.md`(웹)와 `docs/android-shell.md`(셸, 원본 `car/pleos/README.md` 사본)를 참고한다.
+- 웹 구조·브릿지 계약: `web/README.md`
+- 네이티브 셸: `docs/android-shell.md`

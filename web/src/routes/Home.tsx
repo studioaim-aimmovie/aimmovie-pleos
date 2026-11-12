@@ -1,7 +1,6 @@
-// 홈 — apps/web 의 app/page.tsx 대응.
+// 홈.
 //
-// web 은 RSC 가 서버에서 메뉴 목록 → 첫 페이지 편성을 받아 MainWrap 에 넘겼다.
-// 이 앱은 서버 렌더가 없으므로 같은 순서를 클라이언트에서 수행한다.
+// 메뉴 목록 → 첫 페이지 편성 순서로 클라이언트에서 조회해 MainWrap 에 넘긴다.
 
 import { getMenuList } from "@aim/core/api/menu";
 import { getMainShow } from "@aim/core/api/catalog";

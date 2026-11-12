@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 네이티브 문자열은 재생 화면(PlayerActivity)이 쓰는 것만 남았다. 다른 화면 문구는 웹 번들(apps/pleos)이
+<!-- 네이티브 문자열은 재생 화면(PlayerActivity)이 쓰는 것뿐이다. 다른 화면 문구는 웹 번들(web/)이
      @aim/core i18n 사전으로 그린다. common_*·player_* 는 그 사전(packages/core/src/i18n/{ko,en}.ts)과 같은 문장이므로
      사전을 고치면 여기도 맞춘다. car_* 는 차량 앱 전용 문구다. -->
 <resources>

@@ -11,7 +11,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-/** 재생 소스 판정 — mobile player_page.dart(_buildDataSource · isWidevinePlayable)와 같은 규칙인지. */
+/** 재생 소스 판정 규칙. */
 class PlaySourceTest {
     private val config = AppConfig(apiRoot = "https://cms.test", cdnUrl = "https://cdn.test")
 

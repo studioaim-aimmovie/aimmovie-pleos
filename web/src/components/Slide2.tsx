@@ -1,8 +1,8 @@
 /**
  * Slide2 (섹션 가로 캐러셀) — 세로·가로 공용 터치 캐러셀.
  *
- * 원본: 세로 = apps/web 의 components/slide/Slide2.mobile.tsx (세로 포스터 배경 + 진행바 + 라벨)
- *       가로 = apps/tv 의 components/Slide2.tsx (가로 포스터 <img> + 진행바, 미리보기 모달 없음)
+ * 세로 = 세로 포스터 배경 + 진행바 + 라벨
+ * 가로 = 가로 포스터 <img> + 진행바
  *
  * 입력·분기 방식은 Slide1 과 같다(파일 머리말 참고).
  */
@@ -32,8 +32,7 @@ interface dataProps {
     listData?: ContentEntry[];
 }
 
-// 세로 = apps/web Slide2.mobile 의 0 구간, 가로 = apps/tv Slide2 의 1033 구간 값 그대로.
-// slidesOffsetAfter 는 원본에 없다. 끝까지 넘기면 마지막 카드가 화면 오른쪽 끝에 붙어 잘려 보여서 왼쪽 여백과 같게 둔다.
+// slidesOffsetAfter: 끝까지 넘기면 마지막 카드가 화면 오른쪽 끝에 붙어 잘려 보여서 왼쪽 여백과 같게 둔다.
 const SWIPER_PARAMS = {
     portrait: { slidesPerView: 3.36, spaceBetween: 12, slidesOffsetBefore: 16, slidesOffsetAfter: 16, slidesPerGroup: 3 },
     landscape: { slidesPerView: 5.47, spaceBetween: 24, slidesOffsetBefore: 24, slidesOffsetAfter: 24, slidesPerGroup: 5 },
@@ -117,7 +116,7 @@ export default function Slide2(props: dataProps) {
                                     <ContentLabels labels={slide.labels} />
                                 </div>
                             ) : (
-                                // 가로는 TV 마크업 — .focus_card 는 레이아웃 중립 박스다(web_style 머리말).
+                                // 가로는 .focus_card 로 감싼다 — 레이아웃 중립 박스다(web_style 머리말).
                                 <div className="focus_card">
                                     <div
                                         className="bg_area"

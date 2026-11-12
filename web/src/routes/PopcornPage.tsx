@@ -1,11 +1,7 @@
-// 팝콘 충전 안내 — apps/tv 의 PopcornPage 에서 옮겼다(원본: apps/web 의 app/(view)/popcorn/page.tsx).
+// 팝콘 충전 안내.
 //
-// ⚠️ 차량에는 결제 단계가 없다(차량 네이티브 앱과 같은 1차 제외 항목).
-// web 의 같은 화면은 PopcornPackages 가 포트원 V2 결제창을 띄우지만, 이 앱은 상품 버튼을 누르면
+// ⚠️ 차량에는 결제 단계가 없다. 상품 버튼을 누르면
 // aimmovie.com·모바일 앱에서 충전하라는 안내만 띄운다(문구는 i18n/pleosMessages.ts 의 차량판).
-//
-// web 페이지의 하단 안내 세 블록(계정·결제 / 해지·환불 / 서비스 이용 사양)은 옮기지 않았다 —
-// 차량에서 일어날 수 없는 결제·해지 절차를 설명하는 문구다.
 
 import { useState } from "react";
 import { POPCORN_PRODUCTS, bonusPercent } from "@aim/core/api/popcornProducts";
@@ -63,7 +59,6 @@ export default function PopcornPage() {
                                         })}
                                     </span>
                                 </div>
-                                {/* web 은 여기서 결제창을 띄운다. 차량은 안내만. */}
                                 <button
                                     type="button"
                                     className="btn_type4"

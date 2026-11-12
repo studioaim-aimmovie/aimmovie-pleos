@@ -1,8 +1,8 @@
 // 원본: packages/core/src/api/videoStatus.ts
 //
 // 시청 진행률 보고와 시청 상태(이어보기 위치·권한 able) 조회. 논리 경로(/api/videostatus/*)로 보내면
-// ApiClient 가 CMS /authapi/* 로 바꾼다. 웹 셸 전환(2026-10) 뒤 네이티브는 플레이어가 쓰는 두 함수만 남겼다
-// (시청기록·팝콘 잔고·대여는 웹 번들 apps/pleos 가 @aim/core 로 직접 부른다). play = 재생 위치(초) — 이어보기에 그대로 seek 할 수 있게 %가 아닌 초로 저장한다.
+// ApiClient 가 CMS /authapi/* 로 바꾼다. 네이티브는 플레이어가 쓰는 두 함수만 둔다
+// (시청기록·팝콘 잔고·대여는 웹 번들이 @aim/core 로 부른다). play = 재생 위치(초) — 이어보기에 그대로 seek 할 수 있게 %가 아닌 초로 저장한다.
 //
 // 순수 계산(secondsToPercent·isWatchComplete·mergeResumeStatus)은 네트워크 없이 테스트하려고
 // [WatchProgress] 오브젝트로 분리했다. 원본에서는 같은 파일의 export 함수들이다.

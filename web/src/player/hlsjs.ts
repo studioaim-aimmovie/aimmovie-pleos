@@ -1,19 +1,18 @@
 /**
- * hls.js 어댑터 — `<video>` + hls.js(MSE). apps/tv 의 hlsjs.ts 에서 옮겼다.
+ * hls.js 어댑터 — `<video>` + hls.js(MSE).
  *
  * Android WebView 는 Chromium 기반이라 **네이티브 HLS 를 지원하지 않는다.** 그래서 hls.js 로
  * 매니페스트를 파싱하고 MSE 로 세그먼트를 넣어 준다. 데스크탑 브라우저(Safari 제외)도 같은
  * 조건이라 개발 중 실제로 검증되는 경로다. (차량 실사용 재생은 네이티브 Media3 — README 참고.)
  *
- * ## ⚠️ TV Chromium 오디오 트랙 버그 (커밋 `c430a4c`) — 세 어댑터 중 **가장 위험**
+ * ## ⚠️ Chromium 오디오 트랙 버그 (커밋 `c430a4c`)
  *
  * 증상: 오디오 세그먼트 로더가 abort 된 뒤 재시작되지 못해 **무한 버퍼링**에 걸린다.
- * 원인(web 에서 확인된 것): TV Chromium 이 비표준 `HTMLMediaElement.audioTracks` 를 노출하고,
+ * 원인: Chromium 이 비표준 `HTMLMediaElement.audioTracks` 를 노출하고,
  * MSE 재생기가 그것을 자체 트랙 목록으로 미러링하며 복제 트랙을 만든다. 복제가 추가되는
  * 찰나 기존 트랙이 비활성화되어 "활성 오디오 트랙 0개" 구간이 생기고 로더가 죽는다.
- * `apps/web` 은 VHS `overrideNative: true` 로 미러링을 껐다.
  *
- * hls.js 에는 같은 스위치가 없다(애초에 네이티브 `audioTracks` 를 미러링하지 않고 매니페스트의
+ * hls.js 에는 미러링을 끄는 스위치가 없다(애초에 네이티브 `audioTracks` 를 미러링하지 않고 매니페스트의
  * `EXT-X-MEDIA:TYPE=AUDIO` 로 자체 트랙 목록을 만든다). 따라서 **원인 경로는 동일하지 않지만
  * 실패 모드(로더 abort 후 미재시작)는 그대로 재현될 수 있다.** 그래서 원인 한 곳을 끄는 대신
  * 아래 3중 방어를 건다.
@@ -35,16 +34,16 @@ import { createVideoElementAdapter } from "./html5";
 import { normalizeAudioTracks, type PlayerAdapter, type PlayerAdapterInit } from "./PlayerAdapter";
 
 /**
- * 저메모리 기기 지향 hls.js 설정(apps/tv 의 TV 설정 그대로).
+ * 저메모리 기기 지향 hls.js 설정.
  *
- * 데스크탑 기본값은 버퍼를 넉넉히 잡는데, TV·차량 인포테인먼트는 앱 몫 메모리가 수백 MB 라
+ * 데스크탑 기본값은 버퍼를 넉넉히 잡는데, 차량 인포테인먼트는 앱 몫 메모리가 수백 MB 라
  * 버퍼를 크게 두면 GC 압박으로 오히려 끊긴다. 앞/뒤 버퍼를 모두 좁게 잡는다.
  */
 const LOW_MEMORY_CONFIG = {
     // 시작 위치를 우리가 직접 주려면 자동 로드를 끄고 startLoad(pos) 를 불러야 한다.
     autoStartLoad: false,
 
-    // ── 버퍼 (TV 메모리 절약) ──
+    // ── 버퍼 (메모리 절약) ──
     maxBufferLength: 20,
     maxMaxBufferLength: 60,
     maxBufferSize: 30 * 1000 * 1000, // 30MB
@@ -52,14 +51,13 @@ const LOW_MEMORY_CONFIG = {
     backBufferLength: 30,
 
     // ── 스톨 대응 ──
-    // 기본(2초)보다 관대하게 둔다. TV는 세그먼트 요청 왕복이 느려 성급한 넛지가 오히려
+    // 기본(2초)보다 관대하게 둔다. 세그먼트 요청 왕복이 느리면 성급한 넛지가 오히려
     // 재생을 더 흔든다. 대신 nudge 재시도 횟수를 늘려 포기하지 않게 한다.
     highBufferWatchdogPeriod: 3,
     nudgeMaxRetry: 8,
 
     // ── 화질 ──
-    // TV 패널은 1080p 가 상한인 기기가 많다. 플레이어 크기를 넘는 레벨을 받아
-    // 하드웨어 디코더를 낭비하지 않게 한다.
+    // 플레이어 크기를 넘는 레벨을 받아 하드웨어 디코더를 낭비하지 않게 한다.
     capLevelToPlayerSize: true,
 
     // VOD 전용 서비스다. 저지연 모드가 켜지면 라이브 엣지 로직이 개입한다.
@@ -115,7 +113,7 @@ export function createHlsJsPlayer(init: PlayerAdapterInit): PlayerAdapter {
                 console.warn(
                     `[player:hlsjs] 오디오 렌디션 ${tracks.length}개 감지 — ` +
                         `"${target.name || target.lang || target.id}" 로 고정한다 ` +
-                        "(TV Chromium 복제 트랙 대응, 커밋 c430a4c 참고)",
+                        "(Chromium 복제 트랙 대응, 커밋 c430a4c 참고)",
                 );
                 if (instance.audioTrack !== target.id) instance.audioTrack = target.id;
             });
@@ -173,7 +171,7 @@ export function createHlsJsPlayer(init: PlayerAdapterInit): PlayerAdapter {
             instance.loadSource(src);
             instance.attachMedia(video);
             // 이어보기 위치부터 세그먼트를 받는다. 앞부분을 받아 버리고 seek 하면
-            // TV 대역폭과 디코더 워밍업을 그대로 낭비한다.
+            // 대역폭과 디코더 워밍업을 그대로 낭비한다.
             instance.startLoad(Math.max(0, options.startAt ?? 0));
 
             // ⚠️ `handlesStartAt: false` — startLoad(위치) 는 **로드 지점만** 옮긴다.

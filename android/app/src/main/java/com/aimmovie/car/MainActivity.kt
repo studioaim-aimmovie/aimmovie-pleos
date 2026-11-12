@@ -1,11 +1,11 @@
-// 웹 셸. 화면은 apps/pleos(@aim/pleos) 웹 번들을 WebView 로 띄우고, 재생·토큰만 네이티브가 맡는다(하이브리드).
+// 웹 셸. 화면은 web/(@aim/pleos) 웹 번들을 WebView 로 띄우고, 재생·토큰만 네이티브가 맡는다(하이브리드).
 //
 // 로드 방식 — WebViewAssetLoader(https://appassets.androidplatform.net/assets/…):
 //  - file:// 는 오리진이 opaque(null)이라 ES 모듈·fetch 가 CORS 로 막히고, allowFileAccess 를 켜야 한다(파일 접근은 끈다).
 //    https 가상 오리진이면 일반 웹 페이지와 같은 보안 모델로 돌고, localStorage 도 오리진별로 분리된다.
 //  - CMS 는 화이트리스트 밖 오리진에 `Access-Control-Allow-Origin: *` 로 답하고 웹은 `credentials: "omit"` + Bearer 로
 //    부르므로 이 오리진에서도 CMS 변경 없이 통한다(README "CORS" — 로컬 CMS preflight 로 확인).
-//  - 웹 번들은 file:// 를 염두에 두고 클래식 스크립트·상대 경로로 빌드돼 있어(apps/pleos vite.config.ts) 어느 쪽이든 뜬다.
+//  - 웹 번들은 file:// 를 염두에 두고 클래식 스크립트·상대 경로로 빌드돼 있어(web/vite.config.ts) 어느 쪽이든 뜬다.
 //
 // 브릿지 v2(`window.AimPleos`)는 BridgeDispatcher 가 요청 ID 로 비동기 처리한다(shell/ 주석).
 package com.aimmovie.car
@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var webView: WebView
     private lateinit var dispatcher: BridgeDispatcher
 
-    /** 앱 번들을 https 가상 오리진으로 서빙한다. assets/ 는 scripts/build.sh 가 apps/pleos/dist 를 스테이징한 것이다. */
+    /** 앱 번들을 https 가상 오리진으로 서빙한다. assets/ 는 build.sh 가 web/dist 를 스테이징한 것이다. */
     private val assetLoader by lazy {
         WebViewAssetLoader.Builder()
             .setDomain(APP_HOST)
@@ -174,9 +174,9 @@ class MainActivity : ComponentActivity() {
     }
 
     /**
-     * 시스템 뒤로가기. 웹 history 가 있으면 뒤로(apps/pleos 의 useBackClose 가 popstate 로 모달을 닫는다).
+     * 시스템 뒤로가기. 웹 history 가 있으면 뒤로(web 의 useBackClose 가 popstate 로 모달을 닫는다).
      * 더 갈 곳이 없으면: 홈이 아니면 홈으로(재실행 복원으로 상세에서 시작한 경우 — 들어온 길이 history 에 없다),
-     * 홈이면 앱을 백그라운드로 보낸다(AAOS 표준. 종료 확인을 묻지 않는다 — apps/pleos README).
+     * 홈이면 앱을 백그라운드로 보낸다(AAOS 표준. 종료 확인을 묻지 않는다 — web/README.md).
      */
     private fun onSystemBack() {
         when {
@@ -209,7 +209,7 @@ class MainActivity : ComponentActivity() {
 
         /**
          * 앱 번들 오리진 밖으로는 이동하지 않는다. 브릿지(window.AimPleos)가 외부 페이지에 노출되면 토큰을 빼낼 수 있고,
-         * 주행 화면에서 임의 웹 페이지를 띄울 이유도 없다. 웹 번들에는 외부 링크가 없다(apps/pleos README — 외부 폼 버튼 제거).
+         * 주행 화면에서 임의 웹 페이지를 띄울 이유도 없다. 웹 번들에는 외부 링크가 없다.
          */
         override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
             if (request.url.host == APP_HOST) return false

@@ -1,4 +1,4 @@
-// 고객지원 — apps/web 의 app/contact/page.tsx 대응.
+// 고객지원.
 
 import Contact from "@/components/contact";
 

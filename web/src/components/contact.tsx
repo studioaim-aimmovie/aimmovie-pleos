@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { useRouter } from "@/compat/navigation";
 import { useEffect } from "react";
 import { useT } from "@/i18n/LocaleProvider";

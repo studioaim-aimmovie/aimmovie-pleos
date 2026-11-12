@@ -1,4 +1,4 @@
-// 메뉴별 편성 목록 — apps/web 의 app/(view)/list/[type]/page.tsx 대응.
+// 메뉴별 편성 목록.
 // 홈과 동일한 응답 형태를 쓰므로 MainWrap 을 그대로 재사용한다.
 
 import { useParams } from "@/compat/navigation";

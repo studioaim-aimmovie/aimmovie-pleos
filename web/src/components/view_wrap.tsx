@@ -1,10 +1,8 @@
-// 상세 — apps/tv 의 components/view_wrap.tsx 에서 옮겼다(원본: apps/web components/sub/view_wrap.tsx).
+// 상세.
 //
-// 마크업은 apps/web 과 같아 세로(mobile_style)·가로(web_style) 모두 CSS 가 나눈다.
-// apps/tv 와 다른 점:
-//  - 포커스(Norigin) 래퍼를 걷어내고 `<a>`/`<button>` + onClick 으로 바꿨다(터치 전용).
+// 세로(mobile_style)·가로(web_style) 모두 CSS 가 나눈다.
 //  - **KV 미리보기 영상을 재생하지 않는다(정적 포스터만)** — main_wrap 머리말과 같은 이유.
-//  - 유료 회차의 "구매완료" 배지를 apps/web 처럼 되살렸다.
+//  - 유료 회차에는 "구매완료" 배지를 단다.
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
 
@@ -125,7 +123,6 @@ export default function ViewWrap(props: dataProps) {
     // 바로보기는 마지막 본 회차(있으면)로 이어진다 — runPlay 가 episodeVideoId 로 넘긴다.
 
     // KV 정보 영역 표시값
-    const genres: string[] = (data?.genres ?? []).filter(Boolean);
     const ratingText = ratingBadge(data?.content_rating ?? "");
     const summary: string = resolveText(data?.summaries, country);
 
@@ -310,8 +307,8 @@ export default function ViewWrap(props: dataProps) {
                             </div>
                         )}
                         <div className="btn_area">
-                            {/* apps/web 처럼 <button> 이다 — <a> 로 두면 mobile_style 의 버튼 규칙이
-                                빗나가 글자가 4px 위로 뜬다(840 세로에서 apps/web 과 나란히 비교해 확인). */}
+                            {/* <button> 이다 — <a> 로 두면 mobile_style 의 버튼 규칙이
+                                빗나가 글자가 4px 위로 뜬다. */}
                             <button type="button" className="btn_type1" onClick={doPlay}>
                                 <span>{t("common.play_btn")}</span>
                             </button>
@@ -450,7 +447,7 @@ export default function ViewWrap(props: dataProps) {
                                                                 )}
                                                             </div>
                                                             <div className="text_area">
-                                                                {/* 결제 유형 배지: 무료면 팝콘Free, 유료면 필요한 팝콘 개수(구매완료면 구매 배지 — apps/web 과 같다). */}
+                                                                {/* 결제 유형 배지: 무료면 팝콘Free, 유료면 필요한 팝콘 개수(구매완료면 구매 배지). */}
                                                                 {epVideo?.price === "유료" ? (
                                                                     epStatus?.able === true ? (
                                                                         <span className="badge_type2 purchased">

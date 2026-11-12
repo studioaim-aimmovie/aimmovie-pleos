@@ -1,5 +1,5 @@
 /**
- * 웹 플레이어 어댑터 공통 인터페이스. apps/tv 의 player/ 에서 옮겼다.
+ * 웹 플레이어 어댑터 공통 인터페이스.
  *
  * ⚠️ 차량에서 실제 재생은 **네이티브 Media3 플레이어**가 맡는다(`src/native/playback.ts`).
  * 이 웹 플레이어는 브라우저 개발 환경(브릿지 없음)과 브릿지 실패 시의 폴백이다.
@@ -95,9 +95,6 @@ export interface PlayerAdapterInit {
     events?: PlayerEvents;
 }
 
-/** 각 어댑터 모듈이 내보내는 팩토리 시그니처. */
-export type PlayerAdapterFactory = (init: PlayerAdapterInit) => PlayerAdapter;
-
 /**
  * `PlayerEvents` 를 담고 안전하게 호출해 주는 작은 보관함.
  *
@@ -144,13 +141,12 @@ export function finiteOrZero(value: unknown): number {
 /**
  * 네이티브 `audioTracks` 가 노출된 환경에서 **활성 오디오 트랙을 정확히 1개로** 맞춘다.
  *
- * 배경(커밋 `c430a4c`): TV Chromium 은 비표준 `HTMLMediaElement.audioTracks` 를 노출하는데,
+ * 배경(커밋 `c430a4c`): Chromium 은 비표준 `HTMLMediaElement.audioTracks` 를 노출하는데,
  * MSE 경로에서 트랙이 미러링되며 복제 트랙이 하나 더 생긴다. 복제가 추가되는 순간 기존
  * 트랙이 비활성화되어 **활성 트랙 0개** 구간이 생기고, 그 찰나 오디오 세그먼트 로더가
  * abort 된 뒤 재시작되지 못해 무한 버퍼링에 걸린다.
  *
- * `apps/web` 은 VHS `overrideNative: true` 로 미러링 자체를 껐지만, 우리는 VHS 를 쓰지
- * 않으므로 같은 스위치가 없다. 대신 결과 상태(활성 0개 / 활성 2개 이상)를 직접 교정한다.
+ * VHS 를 쓰지 않으므로 미러링을 끄는 스위치(`overrideNative`)가 없다. 대신 결과 상태(활성 0개 / 활성 2개 이상)를 직접 교정한다.
  *
  * ⚠️ **건강한 상태는 건드리지 않는다.** 활성이 이미 1개면 즉시 반환한다 —
  * 사용자가(또는 hls.js 가) 고른 트랙을 임의로 바꾸지 않기 위한 가드다.
@@ -178,7 +174,7 @@ export function normalizeAudioTracks(media: HTMLMediaElement): boolean {
     });
     console.warn(
         `[player] 오디오 트랙 교정: ${tracks.length}개 중 활성 ${enabled.length}개 → 1개 ` +
-            "(TV Chromium 복제 트랙 대응, 커밋 c430a4c 참고)",
+            "(Chromium 복제 트랙 대응, 커밋 c430a4c 참고)",
     );
     return true;
 }

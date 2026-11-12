@@ -1,4 +1,4 @@
-// FAQ — apps/web 의 app/faq/page.tsx 대응.
+// FAQ.
 
 import { getFaqList } from "@aim/core/api/faq";
 import type { FaqItem } from "@aim/core/types/faq";

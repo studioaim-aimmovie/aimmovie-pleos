@@ -1,4 +1,4 @@
-// 콘텐츠 상세 — apps/web 의 app/(view)/contents/[id]/page.tsx 대응.
+// 콘텐츠 상세.
 
 import { useParams } from "@/compat/navigation";
 import { getContentShow } from "@aim/core/api/catalog";

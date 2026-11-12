@@ -1,4 +1,4 @@
-// 네이티브 플레이어에 넘기는 재생 요청. 웹 브릿지 `play` 인자(apps/pleos src/native/bridge.ts 의 NativePlayRequest)와 같은 모양이다.
+// 네이티브 플레이어에 넘기는 재생 요청. 웹 브릿지 `play` 인자(web/src/native/bridge.ts 의 NativePlayRequest)와 같은 모양이다.
 //
 // 재실행 복원(ShellStateStore)도 같은 값을 저장했다가 그대로 플레이어에 넘긴다 — 진입 경로가 둘이어도 플레이어가 받는
 // 입력은 하나로 둔다.

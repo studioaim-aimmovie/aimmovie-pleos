@@ -1,11 +1,8 @@
-// 원본: apps/tv/src/auth/tokenStore.ts
+// 토큰 영속 저장소 + 메모리 캐시. 저장소는 [TokenStorage] 인터페이스가 맡는다(운영: KeystoreTokenStorage, 테스트: InMemoryTokenStorage).
 //
-// 토큰 영속 저장소 + 메모리 캐시. TV 는 localStorage 를 readRaw/writeRaw 로 감쌌고,
-// 여기서는 그 자리를 [TokenStorage] 인터페이스가 맡는다(운영: KeystoreTokenStorage, 테스트: InMemoryTokenStorage).
-//
-// TV 와 다른 점: 저장소 읽기가 비동기(DataStore)라 getTokens 가 suspend 다. 첫 접근에서 한 번만 읽고
+// 저장소 읽기가 비동기(DataStore)라 getTokens 가 suspend 다. 첫 접근에서 한 번만 읽고
 // 이후로는 메모리 캐시를 본다. 상태는 StateFlow 로도 노출해 AuthRepository 가 따라가게 한다
-// (TV 의 setSessionEndedHandler 콜백 대신 — 토큰이 지워지면 구독자가 자동으로 미로그인으로 바뀐다).
+// (토큰이 지워지면 구독자가 자동으로 미로그인으로 바뀐다).
 package com.aimmovie.car.data.auth
 
 import com.aimmovie.car.data.net.AppJson
@@ -36,7 +33,7 @@ data class AuthTokens(
     val user: StoredUser,
 )
 
-/** 암호문/평문 한 덩어리를 읽고 쓰는 저장소. 실패는 조용히 삼킨다(TV readRaw/writeRaw 와 같다). */
+/** 암호문/평문 한 덩어리를 읽고 쓰는 저장소. 실패는 조용히 삼킨다. */
 interface TokenStorage {
     suspend fun read(): String?
     suspend fun write(value: String?)

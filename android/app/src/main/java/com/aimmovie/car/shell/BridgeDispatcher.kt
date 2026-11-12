@@ -1,4 +1,4 @@
-// 웹 브릿지 v2 의 프로토콜 계층(요청 ID 매칭·타임아웃·결과/이벤트 직렬화). 짝: apps/pleos src/native/bridge.ts
+// 웹 브릿지 v2 의 프로토콜 계층(요청 ID 매칭·타임아웃·결과/이벤트 직렬화). 짝: web/src/native/bridge.ts
 //
 // `@JavascriptInterface` 는 동기 호출이고 WebView 의 JavaBridge 스레드에서 돈다. refresh 처럼 네트워크를 기다리는 작업을
 // 그 안에서 끝까지 붙잡으면 웹의 JS 스레드도 같이 멈춘다. 그래서 요청은 즉시 접수만 하고, 결과는 나중에

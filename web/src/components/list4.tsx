@@ -1,8 +1,7 @@
 /**
  * List4 (그리드 목록) — 검색 결과·목록 페이지의 포스터 그리드.
  *
- * 원본: apps/web components/sub/list4.tsx (세로 = 세로 포스터 imageV, 가로 = 가로 포스터 imageH)
- *       + apps/tv components/list4.tsx (hover 미리보기 모달 없음, 카드 탭 → 상세).
+ * 세로 = 세로 포스터 imageV, 가로 = 가로 포스터 imageH. 카드 탭 → 상세.
  *
  * 터치에는 hover 가 없으므로 미리보기 모달을 두지 않는다. 카드 정보와 재생·찜·좋아요는 상세 화면이 맡는다.
  */
@@ -56,7 +55,7 @@ export default function List4({ data = [] }: dataProps) {
                 );
                 return (
                     <li key={item.key}>
-                        {/* 가로는 TV 마크업(.focus_card 레이아웃 중립 박스)을 유지한다.
+                        {/* 가로는 .focus_card(레이아웃 중립 박스)로 감싼다.
                             ⚠️ 감싸는 위치는 `li` 안쪽이어야 한다 — web_style 의 `.list_type4 > li`
                             직접자식 선택자와 `:nth-child(5n)` 규칙이 `li` 기준이다. */}
                         {isPortrait ? card : <div className="focus_card">{card}</div>}

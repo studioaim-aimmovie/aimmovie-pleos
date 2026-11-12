@@ -1,7 +1,5 @@
 // 유료 콘텐츠 대여(팝콘 차감) 확인 모달. window.confirm 대체.
 // 디자인: Figma w_popup_sample(5122:4153) / 모바일 m_bottomsheet(5119:4093).
-//
-// apps/web 의 components/popcorn/RentModal.tsx 를 옮겼다(문구는 core 사전, 이미지 경로만 asset()).
 
 import { useT } from "@/i18n/LocaleProvider";
 import { asset } from "@/lib/asset";

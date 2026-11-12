@@ -25,11 +25,10 @@ import ConfirmModal from "@/components/ConfirmModal";
 import ContentLabels from "@/components/ContentLabels";
 
 // 나의 시청기록 그리드. /authapi/videostatus/watched(전체) 기반.
-// apps/tv 의 WatchHistoryList 에서 옮겼다(원본: apps/web components/sub/WatchHistoryList.tsx).
 // 포스터 + 제목 + 진행바, 탭하면 이어보기(/play/{콘텐츠id}?v={videoId}).
 //
-// 세로는 apps/web 모바일처럼 세로 포스터(언어별)·라벨·포스터 위 삭제(X) 버튼을 쓰고, 가로는 TV 처럼
-// 가로 포스터를 쓴다. TV 의 hover 미리보기 모달이 없으므로(터치에는 hover 가 없다)
+// 세로는 세로 포스터(언어별)·라벨·포스터 위 삭제(X) 버튼을 쓰고, 가로는
+// 가로 포스터를 쓴다. hover 미리보기 모달이 없으므로(터치에는 hover 가 없다)
 // 삭제 버튼은 **가로에서도** 포스터 위에 둔다 — 그러지 않으면 가로 창에서 기록을 지울 길이 없다.
 export default function WatchHistoryList() {
     const { data: session } = useSession();
@@ -108,7 +107,7 @@ export default function WatchHistoryList() {
                     const play = () =>
                         void playVideoAction({ contentId, episodeVideoId: v._id, router });
                     // 리스트 썸네일은 콘텐츠 포스터만 사용(없으면 기본이미지). 비디오 이미지로는 폴백하지 않음.
-                    // 세로는 세로 포스터(표시 언어 우선 — apps/web 과 같다), 가로는 TV 처럼 가로 포스터.
+                    // 세로는 세로 포스터(표시 언어 우선), 가로는 가로 포스터.
                     // 카드 썸네일이므로 CMS 축소본 w640 을 요청한다.
                     const poster = isPortrait
                         ? imageUrl(
@@ -126,21 +125,11 @@ export default function WatchHistoryList() {
                     const labels = prepareLabels(c?.labels);
                     const title = resolveText(c?.titles, country) || resolveText(v.titles, country);
                     const percent = Math.min(100, Math.max(0, it.play_percent ?? 0));
-                    // 남은 시간: play(위치)가 있으면 duration-play, 없으면 percent로 추정.
                     const duration = v.stream?.duration ?? 0;
-                    const remaining =
-                        duration > 0
-                            ? Math.max(
-                                  0,
-                                  duration - (it.play ?? Math.round((duration * percent) / 100)),
-                              )
-                            : 0;
                     // 끝까지 본 콘텐츠는 진행바 숨김(이어볼 게 없으므로). 끝 3초 이내 or 100%.
                     const completed =
                         (duration > 0 && isWatchComplete(it.play ?? 0, duration)) || percent >= 100;
                     const showProgress = percent > 0 && !completed;
-                    // 시리즈면 러닝타임 숨김 — 백엔드 is_series 플래그 기준(찜 목록과 동일 규칙).
-                    const isSeries = !!c?.is_series;
                     const card = (
                         <>
                             <div
@@ -183,7 +172,7 @@ export default function WatchHistoryList() {
                     );
                     return (
                         <li key={v._id}>
-                            {/* 가로는 TV 마크업(.focus_card)을 유지한다 — list4 와 같은 이유로 `li` 안쪽. */}
+                            {/* 가로는 .focus_card 마크업을 쓴다 — list4 와 같은 이유로 `li` 안쪽. */}
                             {isPortrait ? card : <div className="focus_card">{card}</div>}
                         </li>
                     );

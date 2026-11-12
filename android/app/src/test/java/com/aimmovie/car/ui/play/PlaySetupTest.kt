@@ -9,7 +9,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-/** apps/tv/src/routes/Play.tsx resolvePlaySetup(권한 재확인·이어보기·다음 회차) + 시작 위치·복원 기록. */
+/** web/src/routes/Play.tsx resolvePlaySetup(권한 재확인·이어보기·다음 회차) + 시작 위치·복원 기록. */
 class PlaySetupTest {
     private val series: Content = AppJson.decodeFromString(
         Content.serializer(),
@@ -63,7 +63,7 @@ class PlaySetupTest {
         assertEquals("v1", PlaySetupResolver.resolve(series, "", emptyMap()).video?.id)
     }
 
-    // ── 다음 회차(TV handleEndedImpl) ──
+    // ── 다음 회차(handleEndedImpl) ──
 
     @Test
     fun nextPlans_followTv() {

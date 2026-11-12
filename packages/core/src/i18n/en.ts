@@ -16,20 +16,10 @@ const en: Record<MessageKey, string> = {
   "common.search": "Search",
   "common.delete_message":
     "Are you sure you want to delete this content from your viewing history?",
-  // 앱 종료 확인 — apps/tv 의 홈에서 리모컨 Back.
-  "common.exit": "Exit",
-  "common.exit_message": "Do you want to exit the app?",
   "common.set_new_password": "Set New Password",
-  "common.change_password_btn": "Change Password",
-  "common.find_email": "Find Email ID",
-  "common.find_email_btn": "Find ID",
-  "common.find_email_complete": "Email ID Find Complete",
-  "common.find_email_result": "Your email ID is as follows:",
-  "common.network_error": "Please check your network connection.",
   "common.close": "Close",
   "common.loading": "Loading…",
   "common.retry": "Try again",
-  "common.view": "View",
   "common.popcorn_count": "{count} EA",
   "common.popcorn_free": "Free",
   "common.purchased": "Purchased",
@@ -65,157 +55,8 @@ const en: Record<MessageKey, string> = {
     "Email (Inquiries / Customer Center) : aim@aimworks.co.kr",
   "footer.copyright": "Copyright@2026 AIMMOVIE. All rights reserved.",
 
-  // 웰컴(랜딩) — 히어로 (영문 카피 확정 전까지 ko와 동일 미러)
-  "welcome.hero_unit": "분.",
-  "welcome.hero_title": "딱 좋은 이야기의 길이",
-  "welcome.hero_sub1": "짧은 영상은 아쉽고, 긴 정주행은 부담스러운 순간.",
-  "welcome.hero_sub2": "30분이면 새로운 이야기에 빠져들고, 한 편을 온전히 즐길 수 있어요.",
-  "welcome.hero_sub3": "지금 모든 작품을 무료로 시청할 수 있어요.",
-  "welcome.hero_cta": "지금 무료로 시작하기  →",
-  "welcome.hero_cta_tag": "숏폼보다 깊게, 시리즈보다 가볍게",
-  // 웰컴 — 키워드 섹션 (영문)
-  "welcome.kw_label": "FIND YOUR STORY",
-  "welcome.kw_title1": "Pick the story",
-  "welcome.kw_title2": "You're in the mood for.",
-  "welcome.kw_sub": "From genre to mood, a story for how you feel today.",
-  // 웰컴 — WHY 30 MINUTES (섹션3, 영문)
-  "welcome.why_label": "WHY 30 MINUTES",
-  "welcome.why_title1": "Long enough to get hooked.",
-  "welcome.why_title2": "Short enough to start now.",
-  "welcome.why_sub1": "During lunch, on the go, or before bed.",
-  "welcome.why_sub2": "A complete story for the in-between moments of your day.",
-  // 웰컴 — 작품(섹션4, 영문)
-  "welcome.work_title1": "WHICH WORLD",
-  "welcome.work_title2": "WILL YOU ENTER TONIGHT?",
-  "welcome.work_sub1": "From idol survival games and forbidden romance to strange fantasies and unpredictable thrillers.",
-  "welcome.work_sub2": "A new world in 30 minutes. Every story, free right now.",
-  "welcome.work_play": "Watch Now",
-  "welcome.signup_continue_cta": "Sign up & keep watching",
-  "welcome.signup_continue_title": "Can't wait for\nthe next episode!",
-  "welcome.signup_continue_msg":
-    "Sign up to AIM MOVIE now\nand keep watching the next episode!",
-  // 웰컴 — MADE DIFFERENT(섹션5, 영문)
-  "welcome.feat_label": "MADE DIFFERENT",
-  "welcome.feat_title1": "Stories that feel familiar.",
-  "welcome.feat_title2": "Worlds you've never seen.",
-  "welcome.feat.safe_title": "CONTENT",
-  "welcome.feat.safe_title2": "YOU CAN TRUST",
-  "welcome.feat.safe_body1": "Reviewed for safety and copyright standards.",
-  "welcome.feat.safe_body2": "Stories you can watch with confidence.",
-  "welcome.feat.safe_body3": "",
-  "welcome.feat.genre_title": "STORIES",
-  "welcome.feat.genre_title2": "FOR EVERY MOOD",
-  "welcome.feat.genre_body1": "Sci-fi, thrillers, fantasy, romance and more.",
-  "welcome.feat.genre_body2": "A story for every mood.",
-  "welcome.feat.genre_body3": "",
-  "welcome.feat.make_title": "STORIES",
-  "welcome.feat.make_title2": "YOU CAN SHAPE",
-  "welcome.feat.make_body1": "Choose what happens next.",
-  "welcome.feat.make_body2": "A story that moves with your choices.",
-  "welcome.feat.make_body3": "",
-  // 웰컴 — 최종 CTA(섹션6, 영문)
-  "welcome.final_title1": "YOUR NEXT OBSESSION",
-  "welcome.final_title2": "STARTS HERE.",
-  "welcome.final_sub1": "A new world in around 30 minutes.",
-  "welcome.final_sub2": "Start with the one that catches your eye. Every story, free right now.",
-  "welcome.final_cta": "Explore AIMMOVIE →",
-
-  // 로그인
-  "login.title": "Log in",
-  "login.google": "Continue with Google",
-  "login.apple": "Continue with Apple",
-  "login.or": "or",
-  "login.email_join": "Join with Email",
-  "login.email_login": "Log in with Email",
-  "login.save_id": "Save ID",
-  "login.find_password": "Find Password",
-  "login.email_placeholder": "Enter your email.",
-  "login.password": "Password",
-  "login.password_placeholder": "Enter your password.",
-  "login.withdrawn":
-    "This account has been withdrawn. Contact customer support to restore it.",
-  "login.withdrawn_requested":
-    "This account has a withdrawal request. Contact customer support to restore it.",
-  "login.invalid_credentials": "The ID or password is incorrect.",
-  "login.email_unverified":
-    "Please verify your email first. Complete verification from the email sent at sign-up.",
-  "login.resend_done":
-    "If your sign-up is pending, we've sent a verification email. Please check your inbox.",
-  "login.resend_rate_limited": "Too many requests. Please try again later.",
-  "login.server_error":
-    "Failed to connect to the server. Please contact the administrator.",
-  "login.invalid_info": "Login information is invalid.",
-  "login.social_failed": "Social login failed. Please try again in a moment.",
-
-  //아이디 찾기
-  "findid.name_placeholder": "Enter your name without spaces.",
-  "findid.phone_placeholder": "Enter numbers only without '-'.",
-  "findid.fail": "Failed to find your ID.",
-  "findid.error": "An error occurred while finding your ID.",
-
-  //비밀번호 찾기
-  "findpass.desc1": "Enter the email ID you registered at sign-up.",
-  "findpass.desc2": "We'll send a temporary login code to your email.",
-  "findpass.send_code": "Send Code",
-  "findpass.code_placeholder": "Enter the code.",
-  "findpass.reset_btn": "Reset Password",
-  "findpass.email_empty": "Please enter your email.",
-  "findpass.code_sent": "A temporary login code has been sent to your email.",
-  "findpass.send_fail": "Failed to send the code.",
-  "findpass.send_error": "An error occurred while sending the code.",
-  "findpass.code_empty": "Please enter the verification code.",
-  "findpass.code_invalid": "The verification code is incorrect.",
-  "findpass.verify_error": "An error occurred during verification.",
-
   //회원가입
-  "join.title": "Sign Up",
-  "join.flag": "Country Selection",
-  "join.flag.south_korea": "South Korea",
-  "join.phone": "Mobile Number",
-  "join.phone.placeholder": "Enter numbers only without ‘-’",
-  "join.authcode": "Authentication Code",
-  "join.authcode.placeholder": "Enter 6-digit authentication code",
-  "join.authcode.btn": "Get Code",
-  "join.next.btn": "Next Step",
-  "join.name": "Name",
-  "join.name.placeholder": "Please enter your name.",
-  "join.email": "Email ID",
-  "join.email.duplicate": "Check",
-  "join.password": "Password",
-  "join.password.message":
-    "Must include 8~20 characters with letters, numbers, and special characters",
-  "join.password.placeholder": "Please enter your password.",
-  "join.password_confirm": "Confirm Password",
-  "join.password_confirm.placeholder": "Please confirm your password.",
-  "join.agree_message": "I have read and agree to all terms.",
   "join.agree_terms": "Terms of Service",
-  "join.agree_privacy": "Privacy Policy",
-  "join.agree_marketing": "Marketing Information Consent",
-  "join.agree_information_provision":
-    "Third-Party Information Provision Consent",
-  "join.required": "Required",
-  "join.optional": "Optional",
-  "join.complete_message":
-    "Sign-up complete. Complete verification from the email we sent within 24 hours.",
-  "join.complete_login_btn": "Log in",
-  "join.email_placeholder": "Enter your email.",
-  "join.password_mismatch": "Please check your password again.",
-  "join.email_empty": "Please enter your email ID.",
-  "join.email_invalid": "Please enter a valid email address.",
-  "join.email_available": "This ID is available.",
-  "join.email_duplicate": "This ID is already in use.",
-  "join.email_check_error": "An error occurred while checking the ID.",
-  "join.submit_btn": "Sign Up",
-  "join.submit_error": "Sign-up failed. Please try again.",
-  "join.network_error": "An error occurred during sign-up.",
-  "join.phone_empty": "Please enter your mobile number.",
-  "join.code_send_fail": "Failed to send the verification code.",
-  "join.code_first": "Please request the verification code first.",
-  "join.code_six": "Please enter the 6-digit verification code.",
-  "join.code_invalid": "The verification code is incorrect or has expired.",
-  "join.code_resend": "Resend Code",
-  "join.code_resend_cooldown": "Resend ({sec})",
-  "join.verifying": "Verifying…",
 
   //view
   "view.By": "By",
@@ -224,7 +65,7 @@ const en: Record<MessageKey, string> = {
   "view.season": "Season",
   "view.limited_series": "Limited Series",
 
-  //player — /play screen on apps/tv
+  //player — /play screen
   "player.play": "Play",
   "player.pause": "Pause",
   "player.rewind": "Back {sec}s",
@@ -235,12 +76,8 @@ const en: Record<MessageKey, string> = {
   "player.no_source": "No playable video found.",
   "player.load_failed": "Couldn't load the video information.",
   "player.episode_label": "Season {season} · Episode {episode}",
-  "player.drm_unsupported": "Protected videos can't be played on this device.",
-  "player.drm_device_unsupported": "This TV or the connected display doesn't meet the requirements for protected playback (Widevine hardware security, HDCP).",
-  "player.drm_failed": "Couldn't verify playback rights. Please try again shortly.",
 
   //mypage
-  "mypage.title": "My Page",
   "mypage.myinfo": "My Information",
   "mypage.mywatched": "My Viewing History",
   "mypage.mywatched.empty": "No viewing history available.",
@@ -258,15 +95,8 @@ const en: Record<MessageKey, string> = {
     "Failed to process withdrawal. Please try again later.",
   "mypage.withdraw.done_title": "Your membership withdrawal is complete.",
   "mypage.withdraw.done_desc": "Thank you for using AIMMOVIE.",
-  "mypage.myPopcorn": "My Popcorn",
-  "mypage.popcornHistory": "My Popcorn History",
-  "mypage.charge": "Charge",
-  "mypage.subscriptionHistory": "My Subscriptions",
-  "mypage.purchaseOrRent": "Individual Purchase",
-  "mypage.browseCatalog": "Browse Content",
-  "mypage.logout_success": "You have been logged out.",
 
-  //팝콘 충전 안내 (TV)
+  //팝콘 충전 안내
   "popcorn.guide_title": "About Popcorn Top-up",
   "popcorn.guide_desc":
     "What is Popcorn? It is the credit used exclusively within AIMMOVIE to watch titles.",
@@ -278,7 +108,7 @@ const en: Record<MessageKey, string> = {
   "popcorn.tv_unavailable":
     "Popcorn top-up is not available on TV yet. Please visit aimmovie.com to top up.",
 
-  //비밀번호 변경 (TV)
+  //비밀번호 변경
   "pw.label": "Password",
   "pw.rule": "*8-20 characters including letters, numbers and symbols",
   "pw.placeholder": "Enter your password.",
@@ -293,32 +123,8 @@ const en: Record<MessageKey, string> = {
   "pw.fail": "Failed to change the password.",
   "pw.error": "An error occurred while changing the password.",
 
-  //휴대폰 인증
-  "phone.verify_complete": "Verification complete.",
-  "phone.save_failed": "Failed to save. Please try again.",
-  "phone.title": "Phone Verification",
-  "phone.description":
-    "Please complete country and phone verification to use the service.",
-  "phone.submit_button": "Verify and Start",
-
   //시청기록
   "watch.delete_failed": "Failed to delete. Please try again.",
-
-  //메일 인증
-  "mailauth.resend_success":
-    "Verification email resent. Please check your inbox.",
-  "mailauth.resend_failed": "Failed to resend. Please try again later.",
-  "mailauth.server_error": "A server error occurred. Please try again later.",
-  "mailauth.invalid_access":
-    "Invalid access. Please check the verification link again.",
-  "mailauth.verify_complete": "Email verification complete.",
-  "mailauth.verify_failed": "Verification failed or the link has expired.",
-  "mailauth.failed_title": "Email verification failed.",
-  "mailauth.link_validity":
-    "The verification link is valid for 24 hours after issuance.",
-  "mailauth.resending": "Resending…",
-  "mailauth.resend_button": "Resend Verification Email",
-  "mailauth.rejoin_button": "Sign Up Again",
 
   //고객지원 Contact 팝업
   "contact.desc":
@@ -345,7 +151,6 @@ const en: Record<MessageKey, string> = {
   "creator.desc1":
     "AIMMOVIE — the world's first AI-native, mid-form OTT platform.",
   "creator.desc2": "Create. Upload. Reach a global audience. Get paid.",
-  "creator.apply_btn": "Apply as a Creator",
 
   //크리에이터 - FAQ
   "creator.faq_head": "FAQ",
@@ -398,7 +203,7 @@ const en: Record<MessageKey, string> = {
   "about.cta":
     "Right here, right now — {br}{hl}be the first to witness the world{/hl}{br}you've dreamed of.",
 
-  //TV 페어링 — TV 화면(코드 발급·표시)
+  //기기 페어링 — 코드 발급·표시 화면
   "tv.pairing_lead":
     "No need to type your account with the remote. Approve on your phone or PC and this TV signs in right away.",
   "tv.pairing_issuing": "Getting your sign-in code…",
@@ -420,36 +225,10 @@ const en: Record<MessageKey, string> = {
   "tv.pairing_err_network":
     "Cannot reach the server. Please check your network connection.",
 
-  //TV 페어링 — 기기 이름
-  "tv.device_tizen": "Samsung TV",
-  "tv.device_webos": "LG TV",
-  "tv.device_androidtv": "Android TV",
+  //기기 페어링 — 기기 이름
   "tv.device_generic": "TV",
 
-  //TV 페어링 — 폰/PC 승인 화면(/tv)
-  "tv.approve_input_title": "Enter the code shown on your TV.",
-  "tv.approve_input_desc":
-    "Type the 8-character code exactly as it appears on the TV screen.",
-  "tv.approve_input_label": "The 8-character code shown on your TV",
-  "tv.approve_input_hint": "Enter all 8 characters to continue.",
-  "tv.approve_next": "Next",
-  "tv.approve_confirm_title": "Sign in to AIMMOVIE on TV?",
-  "tv.approve_warn":
-    "Make sure this is the code you read on your own TV screen. Do not approve a code someone else gave you.",
-  "tv.approve_submit": "Approve sign-in",
-  "tv.approve_submitting": "Approving…",
-  "tv.approve_done_title": "You are signed in.",
-  "tv.approve_done_desc": "{device} will switch screens in a moment.",
-  "tv.approve_home": "Go to home",
-  "tv.approve_failed_title": "Could not approve.",
-  "tv.approve_err_invalid":
-    "That code was not found. Check the code on your TV screen.",
-  "tv.approve_err_expired": "This code has expired. Get a new code on your TV.",
-  "tv.approve_err_already": "This code was already approved.",
-  "tv.approve_err_rate": "Too many attempts. Please try again in a moment.",
-  "tv.approve_err_generic": "Approval failed.",
-  //대여/충전 팝업 (RentModal / ChargeModal)
-  "common.price_won": "₩{won}",
+  //대여 팝업 (RentModal)
   "rent.title": "Rent Content",
   "rent.my_popcorn": "My Popcorn: {count} EA",
   "rent.season": " Season {season}",
@@ -457,30 +236,6 @@ const en: Record<MessageKey, string> = {
   "rent.confirm": "Watch now?",
   "rent.button": "Watch now for {cost} popcorn",
   "rent.fail": "Purchase failed. Please try again.",
-  "charge.title": "Charge Popcorn",
-  "charge.insufficient": "You need more popcorn",
-  "charge.required": "Required",
-  "charge.my_popcorn": "My Popcorn",
-  "charge.short": "Shortfall",
-  "charge.packages": "Popcorn Packages",
-  "charge.bonus": "+{count} EA",
-  "payment.web_only": "Payment is available on the web.",
-  "payment.login_required": "Login required.",
-  "payment.order_failed": "Failed to create the order.",
-  "payment.verify_failed":
-    "Payment verification failed. Please contact support.",
-  "payment.pending": "Payment is pending.",
-  "payment.error": "An error occurred during payment.",
-  "payment.cancelled": "Payment was cancelled.",
-
-  //팝콘 충전 페이지 (상단)
-  "popcorn.page_title": "Popcorn Charge Guide",
-  "popcorn.desc1": "*What is popcorn? The dedicated payment method",
-  "popcorn.desc2": " for watching content within AIMMOVIE.",
-  "popcorn.charge_complete": "Your popcorn has been charged.",
-  "popcorn.premium_label": "First charge special!",
-  "popcorn.cancel_notice":
-    "For payment cancellation, please contact customer support ({email}).",
 };
 
 export default en;

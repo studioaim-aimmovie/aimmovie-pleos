@@ -13,11 +13,4 @@ object Country {
      * 게스트(빈값)는 접속국가(DEFAULT_COUNTRY=KR) 편성, 로그인 유저는 country_code.
      */
     fun resolveCountry(countryCode: String?): String = countryCode?.takeIf { it.isNotEmpty() } ?: DEFAULT_COUNTRY
-
-    /**
-     * 표시(DISPLAY) 국가. 제목/줄거리/섹션/메뉴명 등 텍스트 표기에 사용.
-     * 게스트(빈값)는 "" → resolveText가 titles.default를 반환. 로그인 유저는 country_code.
-     * (resolveCountry와 달리 홈마켓 폴백을 적용하지 않아, 게스트=기본값 규칙을 지킨다.)
-     */
-    fun viewerCountry(countryCode: String?): String = countryCode ?: ""
 }

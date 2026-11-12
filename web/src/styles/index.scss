@@ -1,32 +1,30 @@
-// apps/pleos 스타일 진입점.
+// 스타일 진입점.
 //
 // 두 디자인을 한 번들에 싣고 **창 비율**로 고른다(globals.scss 의 mobile/desktop 믹스인).
-//  - 가로(landscape) = apps/tv 의 TV 디자인 → web_style.scss(apps/tv 판) + 아래 "가로 보정"
-//  - 세로(portrait)  = apps/web 의 모바일 디자인 → mobile_style.scss + tablet_style.scss(apps/web 판 그대로)
+//  - 가로(landscape) → web_style.scss + 아래 "가로 보정"
+//  - 세로(portrait)  → mobile_style.scss + tablet_style.scss
 //
-// import 순서는 apps/web 의 common.scss 와 같다(web → mobile → tablet). 세 파일 모두 자기 안에서
-// globals 를 다시 import 하는 것도 web 과 같다 — 리셋이 다시 깔리는 순서까지 원본과 맞춰야
-// 같은 폭에서 같은 결과가 나온다.
+// import 순서는 web → mobile → tablet 이다. 세 파일 모두 자기 안에서 globals 를 다시 import 한다 —
+// 리셋이 다시 깔리는 순서까지 맞아야 같은 결과가 나온다.
 
 @import "./globals.scss";
 @import "./web_style.scss";
 @import "./mobile_style.scss";
-// 태블릿(세로 768↑)은 mobile 위에 덮어쓰는 층이라 mobile_style 뒤에 와야 한다(apps/web 과 같다).
-// 840 세로 구역이 여기에 걸린다 — apps/web 모바일을 840 폭으로 열었을 때와 같은 규칙이다.
+// 태블릿(세로 768↑)은 mobile 위에 덮어쓰는 층이라 mobile_style 뒤에 와야 한다.
+// 840 세로 구역이 여기에 걸린다.
 @import "./tablet_style.scss";
 @import "./swiper.css";
 
-// ── apps/web common.scss 에서 옮긴 공통 규칙 ──
+// ── 공통 규칙 ──
 
 // 상단 안전영역 높이. mobile_style 이 고정 요소(.header, 전체화면 nav/search)를 이만큼 내린다.
-// apps/web 은 Flutter 셸이 `--aim-native-inset-top` 을 주입한다. Pleos 셸은 상태바 아래에서
-// WebView 를 시작하므로 0 이다(주입이 생기면 같은 변수로 받는다).
+// Pleos 셸은 상태바 아래에서 WebView 를 시작하므로 0 이다(주입이 생기면 같은 변수로 받는다).
 :root {
     --aim-native-inset-top: 0px;
     --aim-safe-top: var(--aim-native-inset-top, 0px);
 }
 
-// 마이페이지 account_box 의 name/email 이 자동 링크로 감싸질 때의 링크 스타일 무력화(apps/web 과 같다).
+// 마이페이지 account_box 의 name/email 이 자동 링크로 감싸질 때의 링크 스타일 무력화.
 .account_box .info a,
 .account_box .info a[x-apple-data-detectors] {
     color: inherit !important;
@@ -35,8 +33,7 @@
     -webkit-touch-callout: none;
 }
 
-// [임시] 등급 배지 숨김 — apps/web 이 전역으로 숨긴다. 세로는 web 과 같게 숨기고,
-// 가로는 TV 디자인(배지 노출)을 유지한다.
+// [임시] 등급 배지 숨김 — 세로는 숨기고, 가로는 배지를 노출한다.
 @include mobile {
     .badge_type1 {
         display: none !important;
@@ -85,10 +82,8 @@
 
 // ── 가로 카드의 `.focus_card` 박스 ──
 //
-// 가로(TV 디자인) 카드는 `.swiper-slide`/`li` 와 카드 내용(.bg_area/.ranking) 사이에 `.focus_card`
-// 박스를 하나 더 둔다(apps/tv 마크업 그대로 — TV web_style 의 카드 규칙이 이 계층에 맞춰 있다).
-// apps/tv 는 이 박스의 크기를 focus_nav.scss 에서 줬는데, 그 파일은 리모컨 포커스 링과 함께
-// 걷어냈으므로 크기 규칙만 여기로 옮긴다.
+// 가로 카드는 `.swiper-slide`/`li` 와 카드 내용(.bg_area/.ranking) 사이에 `.focus_card`
+// 박스를 하나 더 둔다(web_style 의 카드 규칙이 이 계층에 맞춰 있다). 그 크기 규칙이다.
 // ⚠️ 반드시 "레이아웃 중립"이어야 한다 — 슬라이드를 100% 채우고 position 을 주지 않아(static)
 // .ranking 의 절대위치 기준이 .swiper-slide 로 유지되게 한다. 빠지면 카드 폭이 0 이 된다(실측).
 .focus_card {
@@ -160,8 +155,7 @@ textarea {
 // 이 화면은 `/login` 이라 헤더·푸터가 없다(LayoutShell 의 HIDE_CHROME_PATHS).
 // 화면 전체가 이 컴포넌트이므로 여기서 직접 중앙 정렬하고 여백을 잡는다.
 //
-// 가로 치수는 apps/tv 의 1920×1080 TV 화면값 그대로다(가로 = TV 디자인). 세로는 apps/web 에
-// 대응 화면이 없어(web 은 아이디·비밀번호 로그인), 모바일 디자인의 활자 단계(제목 24 · 본문 15 ·
+// 가로 치수는 1920×1080 화면값 기준이다. 세로는 모바일 디자인의 활자 단계(제목 24 · 본문 15 ·
 // 보조 13)와 카드 톤(.confirm_modal 의 $gray_4 · 8px 반경)을 따라 아래 "세로" 절에서 다시 잡는다.
 .pairing {
     min-height: 100vh;
@@ -504,8 +498,7 @@ textarea {
 
 // ── 세로 터치 보정 ──
 //
-// ⚠️ 보이는 크기는 apps/web 모바일 원본 그대로 두고 **터치 영역만** 넓힌다. 원본 치수를 키우면
-// 세로 디자인이 apps/web 과 어긋난다(작업 원칙). 시청기록 삭제(X)는 26px 원이라 손가락으로 맞히기
+// ⚠️ 보이는 크기는 세로 디자인 그대로 두고 **터치 영역만** 넓힌다. 시청기록 삭제(X)는 26px 원이라 손가락으로 맞히기
 // 어려워, 상자를 48px 로 키우고 원은 같은 크기의 그라디언트로 다시 그린다(겉모습은 그대로).
 .watch_history_list .bg_area .btn_delete {
     top: -3px;
@@ -534,16 +527,15 @@ textarea {
     }
 }
 
-// ── 가로(= TV 디자인) 보정 ──
+// ── 가로 보정 ──
 //
-// 아래는 apps/tv 의 "TV 전용 보정"을 옮긴 것이다. apps/tv 는 미디어쿼리 밖에 두었지만, 이 앱은
 // 세로에서 mobile_style 이 같은 요소를 그리므로 **반드시 desktop(가로) 안에 둔다** — 밖에 두면
 // 순서상 mobile_style 뒤라 세로 디자인을 덮어 버린다.
 @include desktop {
-    // ── 비밀번호 변경 (/pwinquiry) — TV 거리에 맞춘 약 2배 치수(apps/tv 와 같다) ──
+    // ── 비밀번호 변경 (/pwinquiry) — 약 2배 치수 ──
     //
     // ⚠️ `#contents` 를 붙여야 web 쪽 규칙(`.login_area h2`·`.input_type1 label` 등)보다
-    // 명시도가 앞선다(apps/tv README 함정 표 "TV 보정 CSS 가 먹지 않음").
+    // 명시도가 앞선다.
     #contents.signup_page {
         .login_area > .wrap_type1 {
             max-width: 936px;
@@ -617,7 +609,7 @@ textarea {
         }
     }
 
-    // ── 공용 확인 모달 — 데스크탑 기준(모달 360px · 본문 16px · 버튼 48px)의 2배(apps/tv 와 같다) ──
+    // ── 공용 확인 모달 — 데스크탑 기준(모달 360px · 본문 16px · 버튼 48px)의 2배 ──
     .confirm_modal_dimmed {
         padding: 40px;
     }
@@ -648,7 +640,7 @@ textarea {
         }
     }
 
-    // ── 회원 탈퇴 바텀시트 — 대략 2배(apps/tv 와 같다) ──
+    // ── 회원 탈퇴 바텀시트 — 대략 2배 ──
     .withdraw_sheet {
         gap: 48px;
         padding: 72px 88px 104px;
@@ -715,16 +707,15 @@ textarea {
     }
 
     // ── 헤더 마이페이지 드롭다운 — 탭으로 연다 ──
-    // TV web_style 은 `:hover` 로만 연다. 터치에는 hover 가 없어 Header 가 `.on` 을 토글한다.
+    // web_style 은 `:hover` 로만 연다. 터치에는 hover 가 없어 Header 가 `.on` 을 토글한다.
     .header .right .mypage_area.on .mypage_menu {
         display: block;
     }
 
-    // ── 푸터(가로) — apps/web web_style 의 현재 구조(f_top/f_bottom + 사업자 정보) ──
+    // ── 푸터(가로) — f_top/f_bottom + 사업자 정보 구조 ──
     //
-    // apps/tv 의 web_style 은 옛 푸터(좌측 로고 절대배치 + 우측 메뉴, 사업자 정보 없음) 기준이다.
-    // Footer.tsx 를 apps/web 의 현재 마크업으로 맞췄으므로 그 배치 규칙을 apps/web 에서 옮기고,
-    // 옛 규칙의 절대배치·float 를 풀어 준다. 색·글자 크기는 TV web_style 값을 그대로 둔다.
+    // web_style 의 푸터 규칙(좌측 로고 절대배치 + 우측 메뉴)은 Footer.tsx 마크업과 맞지 않아
+    // 절대배치·float 를 풀고 배치를 다시 잡는다. 색·글자 크기는 web_style 값을 그대로 둔다.
     .footer {
         padding: 120px 0 144px;
 

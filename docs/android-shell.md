@@ -1,17 +1,15 @@
 # AimMovie — Pleos Connect 차량 앱 (하이브리드 셸)
 
 현대차그룹 차량 인포테인먼트 플랫폼 **Pleos Connect**(Android Automotive OS 기반) 앱 마켓에 올리는 AimMovie 앱이다.
-**화면은 `apps/pleos`(@aim/pleos) 웹 번들을 WebView 로 띄우고**, 네이티브(Kotlin)는 재생·DRM·MediaSession·토큰 저장만 맡는다.
+**화면은 `web/`(@aim/pleos) 웹 번들을 WebView 로 띄우고**, 네이티브(Kotlin)는 재생·DRM·MediaSession·토큰 저장만 맡는다.
 
-- 앱 ID: `com.aimmovie.car` — 모바일·TV(`com.aimmovie`)와 분리한다.
+- 앱 ID: `com.aimmovie.car`.
 - 산출물: **APK**(Pleos App Market 은 aab 를 받지 않는다, 최대 600MB).
 - minSdk 28(서명 키 rotation 요건), targetSdk 34(Pleos Connect Emulator 기준), versionCode 2000~.
 
 ## 왜 하이브리드인가
 
-- 2026-10-12 에 Compose 네이티브로 화면을 다 만들었지만(3단계), 기존 TV·모바일 디자인과 어긋나고 `packages/core` 를
-  Kotlin 으로 계속 손 동기화해야 해서 2026-10-13 에 방향을 바꿨다. 화면은 `apps/tv` 를 터치·세로 레이아웃으로 바꾼
-  `apps/pleos` 가 맡는다.
+- 화면은 웹 번들(`web/`)이 맡는다. `packages/core` 를 그대로 쓰므로 화면 규칙을 Kotlin 으로 따로 동기화하지 않는다.
 - 재생은 WebView 밖(Media3)에 둔다 — Widevine(MediaDrm 보안 레벨), MediaSession 필수 요건, 구역 전환 중 재생 유지를
   한곳에서 처리하려는 것이다.
 - Pleos 가 2026-10-19 회신으로 "WebView + 네이티브 재생" 구조를 지원한다고 확인했다. WebView 화면에도 네이티브와 같은
@@ -24,7 +22,7 @@
 - 화면은 3구역 멀티윈도우다(세로 1구역 약 840×1212, 가로 2구역 1700×1212, 전체 2560×1380). 영상 앱은 가로 고정이
   허용되지만(2026-10-19 회신) 웹이 세로·가로를 모두 지원하므로 **방향을 고정하지 않는다**. `resizeableActivity` 와
   `configChanges`(재생성 없음)로 구역 전환을 받는다.
-- 결제 모듈이 없다(2027년 도입 예정). 대여는 웹에서 끈다(`apps/pleos` 의 `VITE_RENT_ENABLED=false`).
+- 결제 모듈이 없다(2027년 도입 예정). 대여는 웹에서 끈다(`web/.env.*` 의 `VITE_RENT_ENABLED=false`).
 - 카테고리는 **Entertainment**. 심사 기준: https://document.pleos.ai/docs/pleos-only/distribute/app-review-guide
 - 영상 앱은 MediaSession 연동(play/pause/stop)이 필수다. 다시 실행하면 마지막 상태를 복원해야 한다.
 
@@ -54,9 +52,9 @@ app/src/main/java/com/aimmovie/car/
 └── ui/{common,theme}        # 플레이어가 쓰는 버튼·테마·표시 언어
 ```
 
-- `data/`·`domain/` 의 파일은 `packages/core` 에서 옮긴 것이다. **파일 첫 줄 주석에 원본 TS 경로가 있다** — TS 를 고치면 같이 고친다.
-  웹 셸 전환 때 플레이어가 쓰지 않는 함수(홈·검색·팝콘·찜 등)는 지웠다. 그 기능은 웹이 `@aim/core` 를 그대로 쓴다.
-- 문자열은 플레이어 문구만 남았다(`res/values{,-en}/strings.xml`). `common_*`·`player_*` 는 core i18n 사전과 같은 문장이다.
+- `data/`·`domain/` 의 파일은 `packages/core` 의 Kotlin 판이다. **파일 첫 줄 주석에 원본 TS 경로가 있다** — TS 를 고치면 같이 고친다.
+  플레이어가 쓰는 함수만 둔다. 홈·검색·팝콘·찜 등은 웹이 `@aim/core` 를 그대로 쓴다.
+- 문자열은 플레이어 문구뿐이다(`res/values{,-en}/strings.xml`). `common_*`·`player_*` 는 core i18n 사전과 같은 문장이다.
 
 ### WebView 셸 (`MainActivity`)
 
@@ -84,7 +82,7 @@ app/src/main/java/com/aimmovie/car/
 
 ## 브릿지 v2 (`window.AimPleos`)
 
-짝: `apps/pleos/src/native/bridge.ts`(계약 정본·타입), `apps/pleos/README.md` "브릿지 계약". `@JavascriptInterface` 는 동기라
+짝: `web/src/native/bridge.ts`(계약 정본·타입), `web/README.md` "브릿지 계약". `@JavascriptInterface` 는 동기라
 네트워크(refresh)를 기다리면 JS 가 멈추므로 **요청 ID 기반 비동기 프로토콜**을 쓴다.
 
 ```
@@ -123,28 +121,18 @@ QR 페어링 화면은 웹(`DevicePairing`)이고, 받은 토큰을 `savePairedT
 
 ## 빌드·설치
 
-```bash
-./car/pleos/scripts/build.sh            # apps/pleos(개발 모드: 로컬 CMS) 스테이징 + debug APK
-./car/pleos/scripts/build.sh release    # apps/pleos(운영 CMS) 스테이징 + 스토어 제출용 APK (key.properties 필요)
-./car/pleos/scripts/deploy.sh [debug|release] [<adb 시리얼>]   # 제거 → 설치 → (debug) adb reverse tcp:8066 → 실행
-```
+빌드·설치 명령은 루트 `README.md` 를 본다.
 
 - 웹 번들은 `scripts/stage-web.sh` 가 빌드해 **빌드 타입별 소스셋**(`app/src/debug/assets`, `app/src/release/assets`)에 넣는다.
   웹과 네이티브는 같은 CMS 를 봐야 하므로(토큰 공유) debug 는 `vite build --mode development`(.env.development = 로컬 CMS),
   release 는 운영 CMS 로 빌드한다. 소스셋을 나눠 debug 웹 번들이 release APK 에 섞이지 않게 한다. 스테이징 산출물은 커밋하지 않는다.
-  - `apps/pleos/.env*.local` 이 있으면 중단한다(`ALLOW_LOCAL_ENV=1` 로 허용). release 산출물에 로컬/사설 주소가 있으면 실패한다.
-  - `SKIP_WEB_BUILD=1` 이면 기존 `apps/pleos/dist` 를 그대로 쓴다(모드가 맞는지는 직접 확인).
+  - `web/.env*.local` 이 있으면 중단한다(`ALLOW_LOCAL_ENV=1` 로 허용). release 산출물에 로컬/사설 주소가 있으면 실패한다.
+  - `SKIP_WEB_BUILD=1` 이면 기존 `web/dist` 를 그대로 쓴다(모드가 맞는지는 직접 확인).
   - `gradlew assemble*` 를 바로 돌리면 웹 번들이 없을 수 있다(경고만 남긴다). 설치용 APK 는 `build.sh` 로 만든다.
-- JDK 17 이상이 필요하다. 스크립트가 Android Studio 내장 JBR 을 자동으로 잡는다.
-- 단위 테스트·lint: `cd car/pleos/AimMovie && ./gradlew testDebugUnitTest lintDebug`
-- debug 네이티브가 다른 CMS 를 보게 하려면 `-Paim.apiRoot.debug=http://192.168.x.x:8066` + `apps/pleos/.env.local` 의 `VITE_API_ROOT` 를
+- 단위 테스트·lint: `cd android && ./gradlew testDebugUnitTest lintDebug`
+- debug 네이티브가 다른 CMS 를 보게 하려면 `-Paim.apiRoot.debug=http://192.168.x.x:8066` + `web/.env.local` 의 `VITE_API_ROOT` 를
   같은 값으로(평문 HTTP 는 `src/debug/res/xml/network_security_config.xml` 에 그 호스트 추가).
 - 디버깅: debug 빌드는 `chrome://inspect` 로 WebView 에 붙는다. `adb logcat -s AimWeb AimShell AimPlayer`.
-
-### 릴리스 서명
-
-`AimMovie/key.properties.example`을 `key.properties`로 복사해 채운다. 차량 앱은 모바일·TV와 다른 **전용 키스토어**를 쓴다.
-`key.properties`가 없으면 release APK 가 debug 키로 서명되므로 제출하면 안 된다. release 서명은 v3 를 켜 두었다(키 rotation 대비).
 
 ### Pleos Connect Emulator
 
@@ -156,11 +144,9 @@ https://document.pleos.ai/docs/connect/guide/getting-started/application-develop
   - Windows/Linux: `https://nexus-playground.pleos.ai/repository/raw-releases/connect-avd/2.x/crp-sys-img.xml`
 - AVD: Automotive > **Pleos Connect v2.1.0**, **Cold boot**(quick boot 는 VHAL 이 꺼진다), RAM 4GB.
   `emulator -avd Pleos_Connect_v2.1.0 -no-snapshot-load -no-snapshot-save`
-- 기어·주행 상태는 **Pleos Connect Virtual Console** 에서 바꾼다. 포트를 포워딩한 뒤 PC 브라우저에서 `http://127.0.0.1:8088/` 을 열고
-  Motion → Gear Selection 을 쓴다(런처의 P R N D 표시는 눌러도 바뀌지 않는다). 포워딩은 에뮬레이터를 다시 띄우면 풀린다.
-  `adb -s emulator-5554 forward tcp:8088 tcp:8088`
+- 기어·주행 상태는 **Pleos Connect Virtual Console** 에서 바꾼다(루트 `README.md` 참고).
 - 실측(2026-10-19): Android 14, 화면 2560×1440 @160dpi, **WebView = `ai.pleos.android.webview` 131.0.6752.0**
-  (`apps/pleos` 의 `build.target` chrome108 보다 높다). 앱은 가로 2구역에 1683×1210px(CSS 1224×880, DPR 1.375)로 뜬다.
+  (`web/vite.config.ts` 의 `build.target` chrome108 보다 높다). 앱은 가로 2구역에 1683×1210px(CSS 1224×880, DPR 1.375)로 뜬다.
 - 앱은 **사용자 10**으로 돈다(AAOS 멀티유저). 데이터 확인은 `adb shell run-as com.aimmovie.car --user 10 …`.
 - **에뮬레이터에는 Widevine 이 없다**(DRM HAL 은 `android.hardware.drm-service-lazy.clearkey` 뿐). DRM 콘텐츠는
   "이 차량에서는 보호된(DRM) 영상을 재생할 수 없습니다"로 막히는 것이 정상이다. Widevine 재생은 실차(또는 Pleos 가 안내할
@@ -176,9 +162,8 @@ https://document.pleos.ai/docs/connect/guide/getting-started/application-develop
 | 단계 | 내용 | 상태 |
 |---|---|---|
 | 0 | Pleos 문의 | 회신 완료(2026-10-19). Widevine 레벨·결제 정책은 추가 안내 대기 |
-| 1~2 | 프로젝트 골격, 데이터 계층(`packages/core` 이식·Keystore 토큰) | 완료 |
-| 3 | 화면(반응형 Compose) | **폐기** — 웹(`apps/pleos`)으로 대체(2026-10-19 셸 전환 때 코드 제거) |
-| 4 | 플레이어(Media3 HLS·DASH Widevine, MediaSession) | 완료. 셸의 `PlayerActivity` 로 재사용. DRM 실기 검증 전 |
+| 1~2 | 프로젝트 골격, 데이터 계층(`packages/core` Kotlin 판·Keystore 토큰) | 완료 |
+| 4 | 플레이어(Media3 HLS·DASH Widevine, MediaSession) | 완료(셸의 `PlayerActivity`). DRM 실기 검증 전 |
 | 5 | 하이브리드 셸(WebView + 브릿지 v2 + 방식 A 토큰 + 재실행 복원) | 완료(2026-10-19). Pleos 에뮬레이터에서 홈·페어링 로그인·마이페이지·무료 재생·모달 뒤로가기·force-stop 복원 확인 |
 | 6 | 스토어 제출 | 예정 |
 

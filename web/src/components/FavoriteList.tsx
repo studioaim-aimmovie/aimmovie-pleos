@@ -17,12 +17,11 @@ import ContentLabels from "@/components/ContentLabels";
 import { useIsPortrait } from "@/hooks/useLayoutMode";
 
 // 찜한 콘텐츠 그리드. /authapi/likestatus/mylist(favorite:true) 기반.
-// apps/tv 의 FavoriteList 에서 옮겼다(원본: apps/web components/sub/FavoriteList.tsx).
 // 카드 레이아웃은 나의 시청기록(list_type4)과 동일 — 시청 이력 있으면 포스터 하단에
 // 이어보기 타임라인도 노출(완료 시 숨김). 탭하면 상세로 이동한다.
 //
-// 세로는 apps/web 모바일처럼 세로 포스터(언어별)와 라벨을, 가로는 TV 처럼 가로 포스터를 쓴다.
-// TV 의 hover 미리보기 모달은 없다(터치에는 hover 가 없다). 찜 해제·재생은 상세가 맡는다.
+// 세로는 세로 포스터(언어별)와 라벨을, 가로는 가로 포스터를 쓴다.
+// hover 미리보기 모달은 없다(터치에는 hover 가 없다). 찜 해제·재생은 상세가 맡는다.
 export default function FavoriteList() {
     const isPortrait = useIsPortrait();
     const { data: session } = useSession();
@@ -120,7 +119,7 @@ export default function FavoriteList() {
                 );
                 return (
                     <li key={slide.key}>
-                        {/* 가로는 TV 마크업(.focus_card)을 유지한다 — list4 와 같은 이유로 `li` 안쪽. */}
+                        {/* 가로는 .focus_card 마크업을 쓴다 — list4 와 같은 이유로 `li` 안쪽. */}
                         {isPortrait ? card : <div className="focus_card">{card}</div>}
                     </li>
                 );

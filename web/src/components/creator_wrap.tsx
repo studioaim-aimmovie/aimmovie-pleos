@@ -1,9 +1,7 @@
-// 크리에이터 지원 — apps/web 의 components/sub/creator_wrap.tsx 를 옮겼다(import·이미지 경로만 바꿨다).
+// 크리에이터 지원.
 //
-// apps/tv 는 리모컨용으로 정적 격자·펼친 FAQ 로 바꿨지만, 차량은 터치 스크롤이라 web 연출을 그대로 쓴다.
-// ⚠️ 하나만 뺐다: 외부 구글 폼으로 가는 "지원하기" 버튼. WebView 셸에서 외부 링크를 열면 앱 화면이
-//    통째로 폼으로 넘어가거나(셸이 막지 않으면) 아무 반응이 없다(막으면). 외부 브라우저로 넘기는
-//    브릿지가 생기면 되살린다(README "TV 와 다른 점").
+// ⚠️ 외부 구글 폼으로 가는 "지원하기" 버튼은 두지 않는다. WebView 셸에서 외부 링크를 열면 앱 화면이
+//    통째로 폼으로 넘어가거나(셸이 막지 않으면) 아무 반응이 없다(막으면).
 import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, FreeMode } from "swiper/modules";
@@ -39,7 +37,7 @@ export default function CreatorWrap() {
 
     return (
         <div className="creator_inner">
-            {/* 배경 그라디언트 — 위치/블러는 원본 유지, fill 색상만 천천히 전환 */}
+            {/* 배경 그라디언트 — fill 색상만 천천히 전환 */}
             <div className="bg_gradient" aria-hidden="true">
                 <svg
                     viewBox="0 0 3031 1498"

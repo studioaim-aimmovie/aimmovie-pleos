@@ -1,5 +1,4 @@
-// 재생 화면 — apps/tv 의 routes/Play.tsx 에서 옮겼다
-// (원본: apps/web 의 `app/(view)/play/[id]/page.tsx` + `components/player/player.tsx`).
+// 재생 화면.
 //
 // **모든 재생 진입이 지나는 한 곳**이다(compat/playAction.ts 가 여기로 보낸다). 하는 일은 둘이다.
 //
@@ -7,7 +6,7 @@
 //  B) 재생 넘기기 — 네이티브 셸이면 브릿지로 Media3 에 넘기고(src/native/playback.ts),
 //     아니면(브라우저 개발 환경) 아래의 웹 플레이어로 직접 재생한다.
 //
-// 웹 플레이어 경로가 맡는 것(apps/tv 와 같다):
+// 웹 플레이어 경로가 맡는 것:
 //  1) 이어보기(resume)      — 저장된 재생 위치(초)로 시작
 //  2) 진행률 저장           — 일시정지 / 종료 / 이탈 / 언마운트
 //  3) 다음 에피소드 자동재생 — 무료면 무조건, 유료면 시청권한(able) 있을 때만
@@ -100,7 +99,7 @@ export default function Play() {
 
     // ── 2) 재생 대상·이어보기·다음화 해석 ──
     // 시청 상태 조회를 한 번만 하도록 회차 전체를 모아 한 요청으로 처리한다
-    // (web 은 "마지막 본 회차" / "유료 게이트" / "이어보기" 를 각각 조회했다).
+    // ("마지막 본 회차" / "유료 게이트" / "이어보기" 가 모두 같은 응답에서 나온다).
     const {
         data: setup,
         loading: setupLoading,
@@ -153,7 +152,7 @@ export default function Play() {
     const titleRef = useRef(title);
     titleRef.current = title;
 
-    // ── 진행률 저장 (web player.tsx 의 saveProgress 이식) ──
+    // ── 진행률 저장 ──
     const saveProgress = useCallback((opts: { useBeacon?: boolean; force?: number } = {}) => {
         const player = playerRef.current;
         const video = videoIdRef.current;
@@ -444,7 +443,7 @@ export default function Play() {
 }
 
 /**
- * 재생에 필요한 값을 한 번에 해석한다. web 의 서버 컴포넌트가 하던 일이다.
+ * 재생에 필요한 값을 한 번에 해석한다.
  *
  * 시청 상태 조회를 **한 번**만 한다 — "마지막 본 회차" 판정, 유료 게이트, 이어보기 위치,
  * 유료 다음화 권한이 모두 같은 응답에서 나온다.
@@ -483,8 +482,7 @@ async function resolvePlaySetup(
     const src = hlsUrl(video?.stream?.manifests?.hls_path);
     if (!video || !src) return { ...empty, video: video ?? null };
 
-    // 서버측 게이트가 없으므로 여기서 유료 권한을 확인한다.
-    // (web 은 RSC 에서 확인 후 redirect 했다. 이 앱은 이 값으로 <Navigate> 한다.)
+    // 서버측 게이트가 없으므로 여기서 유료 권한을 확인한다(화면이 이 값으로 <Navigate> 한다).
     // 네이티브로 넘기기 전에 여기서 걸러지므로, 브릿지에는 시청 권한이 확인된 회차만 간다.
     if (video.price === "유료" && statusMap[video._id]?.able !== true) {
         return { ...empty, video, src, blocked: true };

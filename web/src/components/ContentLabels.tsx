@@ -1,5 +1,4 @@
-// 카드 포스터(.bg_area) 위 라벨 오버레이 — apps/web 의 components/common/ContentLabels.tsx 와
-// lib/labelPosition.ts 를 합쳐 옮겼다. 세로 디자인(apps/web 모바일 카드)에 라벨이 있어서 가져왔다.
+// 카드 포스터(.bg_area) 위 라벨 오버레이.
 //
 // position 값(DB 문자열)은 미리 정해 둔 클래스로 매핑한다. 스타일은 index.scss 의 `.content_label`.
 

@@ -1,18 +1,15 @@
-"use client";
-
 // 시청 진행률 저장 클라이언트 유틸.
-// 재생 중 pause/ended/이탈 시점에 프론트 API 프록시(/api/videostatus/play)로
-// { video, play } 를 보낸다. 사용자 식별(user)은 프록시가 세션에서 채워 CMS로 전달한다.
+// 재생 중 pause/ended/이탈 시점에 논리 경로(/api/videostatus/play)로 { video, play } 를 보낸다.
+// 전송자(authFetch)가 CMS /authapi 경로로 바꾸고 Bearer 로 사용자를 식별시킨다.
 //
 // play = 재생 위치(초). 이어보기에 그대로 seek할 수 있도록 %가 아닌 초로 저장한다.
 
 import type { LocalizedText, ContentLabel } from "../types/contents";
 import { authBeacon, authFetch } from "../config";
 
-/** 프론트 API 프록시 경로. 여기서 세션 user를 붙여 CMS authapi로 포워딩한다. */
+/** 논리 경로. 전송자가 CMS authapi 경로로 바꾼다. */
 const ENDPOINT = "/api/videostatus/play";
 const RESUME_ENDPOINT = "/api/videostatus/resume";
-const ABLE_ENDPOINT = "/api/videostatus/able";
 const UNLOCK_ENDPOINT = "/api/popcorn/unlock";
 const BALANCE_ENDPOINT = "/api/popcorn/balance";
 const WATCHED_ENDPOINT = "/api/videostatus/watched";
@@ -143,30 +140,6 @@ export async function unlockVideo(
         return (await res.json().catch(() => ({ result: false }))) as UnlockResult;
     } catch {
         return { result: false, message: "네트워크 연결을 확인해주세요." };
-    }
-}
-
-/**
- * 시청 가능 여부(able)를 기록한다. (팝콘 구매 등)
- * days > 0 이면 그 기간 후 자동 만료(TTL). 성공 시 true.
- */
-export async function setWatchAble(
-    video: string,
-    able: boolean,
-    days = 0,
-): Promise<boolean> {
-    if (!video) return false;
-    try {
-        const res = await authFetch(ABLE_ENDPOINT, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ video, able, days }),
-        });
-        if (!res.ok) return false;
-        const data = await res.json();
-        return !!data?.result;
-    } catch {
-        return false;
     }
 }
 
@@ -312,8 +285,8 @@ export function sendWatchProgress(
     if (!video) return;
     const payload = JSON.stringify({ video, play, play_percent: playPercent });
 
-    // beacon 전송자는 플랫폼이 주입한다(web/mobile=navigator.sendBeacon).
-    // TV는 Authorization 헤더를 실을 수 없어 beacon을 쓰지 않고 아래 keepalive fetch로 폴백한다.
+    // beacon 전송자는 앱이 주입한다. 주입하지 않았으면(Authorization 헤더를 실을 수 없는 Bearer 앱)
+    // 아래 keepalive fetch로 폴백한다.
     if (opts.useBeacon && authBeacon(ENDPOINT, payload)) return;
 
     void authFetch(ENDPOINT, {

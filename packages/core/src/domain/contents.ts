@@ -51,7 +51,7 @@ export const FALLBACK_IMAGE_V = "/images/thum_default_03.jpeg"; // 모바일 세
 /**
  * CMS 리사이즈본 크기. CMS 가 `/uploadimg/resize/<size>/<파일명>` 으로 서빙한다.
  * 포맷은 바꾸지 않으므로 확장자는 원본 그대로다.
- *  - w640  카드 썸네일(TV 에서 약 330x186px 로 표시된다)
+ *  - w640  카드 썸네일
  *  - w1920 상세 히어로·홈 KV(화면 폭을 채운다)
  */
 export type ImageSize = "w640" | "w1920";
@@ -63,8 +63,8 @@ export type ImageSize = "w640" | "w1920";
  * 요청을 받은 시점에 원본에서 만들어 내려주므로(온디맨드 폴백), 호출부가 존재 여부를
  * 따질 필요가 없다.
  *
- * ⚠️ 리사이즈본이 CMS 에 없던 시절에는 원본을 그대로 썼는데, 포스터 한 장이 평균 2.9MB
- *    (최대 15.9MB, 4K)라 TV 에서 썸네일 등장이 크게 밀렸다. 지금은 카드 한 장이 약 60KB 다.
+ * ⚠️ 원본 포스터는 한 장이 평균 2.9MB(최대 15.9MB, 4K)라 썸네일 등장이 크게 밀린다.
+ *    리사이즈본은 카드 한 장이 약 60KB 다.
  */
 export function imageUrl(path?: string, fallback = FALLBACK_IMAGE, size?: ImageSize) {
     if (!path) return fallback;
@@ -255,51 +255,6 @@ export function pickLastWatchedVideoId(statusMap: VideoStatusMap, ids: string[])
     return bestId;
 }
 
-async function fetchText(url: string): Promise<string> {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`m3u8 fetch 실패: ${res.status}`);
-    return res.text();
-}
-
-/**
- * m3u8을 가져오되, master 플레이리스트면 첫 variant까지 한 단계 더 들어가
- * 실제 세그먼트(#EXTINF)가 있는 미디어 플레이리스트 텍스트를 반환한다.
- */
-async function fetchMediaPlaylist(m3u8Url: string): Promise<string> {
-    let text = await fetchText(m3u8Url);
-    if (text.includes("#EXT-X-STREAM-INF")) {
-        const lines = text.split(/\r?\n/);
-        let variant = "";
-        for (let i = 0; i < lines.length && !variant; i++) {
-            if (!lines[i].startsWith("#EXT-X-STREAM-INF")) continue;
-            // #EXT-X-STREAM-INF 다음의 첫 비주석 라인이 variant URL
-            for (let j = i + 1; j < lines.length; j++) {
-                const l = lines[j].trim();
-                if (l && !l.startsWith("#")) {
-                    variant = l;
-                    break;
-                }
-            }
-        }
-        if (variant) text = await fetchText(new URL(variant, m3u8Url).href);
-    }
-    return text;
-}
-
-/**
- * HLS 첫 번째 세그먼트의 길이(초)를 구한다. 미디어 플레이리스트의 첫 #EXTINF 값.
- * 가져오기/파싱 실패 시 0을 반환(호출부에서 폴백 처리).
- */
-export async function getFirstSegmentDuration(m3u8Url: string): Promise<number> {
-    try {
-        const playlist = await fetchMediaPlaylist(m3u8Url);
-        const m = playlist.match(/#EXTINF:\s*([\d.]+)/);
-        return m ? parseFloat(m[1]) : 0;
-    } catch {
-        return 0;
-    }
-}
-
 /**
  * 콘텐츠 항목에서 화면에 필요한 값만 추려낸다.
  * - top10 / sections.list 항목: { order, contents } 형태
@@ -400,7 +355,7 @@ export function pickContents(
         // 시리즈 여부. 시리즈는 단일 러닝타임을 노출하지 않는다.
         isSeries,
         // 대표 영상(video)이 DRM 암호화인지. 재생 진입 전 로그인 게이트 판단에 쓴다
-        // (모바일 네이티브 플레이어는 웹 EME 없이 라이선스 토큰을 직접 요청하므로
+        // (네이티브 플레이어가 라이선스 토큰을 직접 요청하므로
         // 로그인 사용자만 재생을 시도하도록 호출부가 이 값으로 미리 막는다).
         isDrmEncrypted,
         // 대표 영상의 결제 유형("무료" | "유료", 미설정이면 빈 문자열)과 필요 팝콘 수.

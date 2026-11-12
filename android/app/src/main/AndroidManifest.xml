@@ -28,7 +28,7 @@
              영상 앱은 P단·속도 0 에서만 쓸 수 있고, DO 미선언 앱은 P단을 벗어나면 시스템이 종료한다.
              주행 제한 로직을 직접 만들지 않고 플랫폼 동작에 맡긴다.
 
-             MainActivity 는 apps/pleos 웹 번들을 띄우는 WebView 셸이다.
+             MainActivity 는 web/ 웹 번들을 띄우는 WebView 셸이다.
              configChanges: 멀티윈도우 구역 전환(세로 1구역 ↔ 가로 2구역)마다 Activity 가 재생성되면 WebView 가 페이지를
              다시 읽어 스크롤·입력값을 잃는다. 크기 변경은 Activity 가 직접 받고 웹이 창 비율로 레이아웃을 다시 잡는다.
              screenOrientation 은 고정하지 않는다 — Pleos 는 영상 앱의 가로 고정을 허용하지만(2026-10-19 회신) 웹이 세로·가로를

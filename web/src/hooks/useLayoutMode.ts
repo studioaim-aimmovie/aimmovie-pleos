@@ -3,7 +3,7 @@
 // 대부분의 분기는 CSS 미디어쿼리가 맡는다. 이 훅은 **마크업 자체가 달라야 하는 곳**에서만 쓴다
 // (세로는 세로 포스터 이미지, 카드 행의 Swiper 설정, 하단 탭 노출 등).
 //
-// 기준: 폭 ≤ 높이 또는 폭 < 600px → 세로. 차량 네이티브 앱의 LayoutMode.kt 와 같다.
+// 기준: 폭 ≤ 높이 또는 폭 < 600px → 세로.
 // `(orientation: portrait)` 는 "높이 ≥ 폭"이라 첫 조건과 정확히 같다.
 //
 // ⚠️ 이 훅을 쓰는 컴포넌트는 **모드가 바뀌어도 언마운트되지 않게** 둔다. 창 구역이 바뀔 때마다
@@ -32,7 +32,7 @@ export function useLayoutMode(): LayoutMode {
     return useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 }
 
-/** 세로 레이아웃인가. apps/web 의 `useDevice().isMobile` 자리에 쓴다. */
+/** 세로 레이아웃인가. */
 export function useIsPortrait(): boolean {
     return useLayoutMode() === "portrait";
 }

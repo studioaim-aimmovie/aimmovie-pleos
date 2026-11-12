@@ -12,12 +12,3 @@ export const DEFAULT_COUNTRY = "default";
 export function resolveCountry(countryCode?: string | null): string {
     return countryCode || DEFAULT_COUNTRY;
 }
-
-/**
- * 표시(DISPLAY) 국가. 제목/줄거리/섹션/메뉴명 등 텍스트 표기에 사용.
- * 게스트(빈값)는 "" → resolveText가 titles.default를 반환. 로그인 유저는 country_code.
- * (resolveCountry와 달리 홈마켓 폴백을 적용하지 않아, 게스트=기본값 규칙을 지킨다.)
- */
-export function viewerCountry(countryCode?: string | null): string {
-    return countryCode ?? "";
-}

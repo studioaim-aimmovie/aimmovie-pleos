@@ -1,4 +1,4 @@
-// `window.AimPleos` 로 웹에 노출되는 객체. 짝: apps/pleos src/native/bridge.ts 의 AimPleosBridge.
+// `window.AimPleos` 로 웹에 노출되는 객체. 짝: web/src/native/bridge.ts 의 AimPleosBridge.
 //
 // 여기서는 받아서 넘기기만 한다. `@JavascriptInterface` 메서드는 WebView 의 JavaBridge 스레드에서 불리고 원시값만
 // 주고받을 수 있어, 실제 처리는 BridgeDispatcher(코루틴)가 맡고 결과는 evaluateJavascript 로 돌려준다.
@@ -28,7 +28,7 @@ class ShellBridge(
     fun authSnapshot(): String = snapshotJson()
 
     companion object {
-        /** apps/pleos src/native/bridge.ts 의 BRIDGE_VERSION 과 같아야 한다. */
+        /** web/src/native/bridge.ts 의 BRIDGE_VERSION 과 같아야 한다. */
         const val VERSION = 2
 
         /** addJavascriptInterface 이름. 웹의 BRIDGE_NAME 과 같아야 한다. */

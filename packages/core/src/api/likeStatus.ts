@@ -1,8 +1,6 @@
-"use client";
-
 // 좋아요(like)·즐겨찾기(favorite) 저장 클라이언트 유틸.
-// 프론트 API 프록시(/api/likestatus/*)로 { contents, <field> }를 보낸다.
-// 사용자 식별(user)은 프록시가 세션에서 채워 CMS로 전달한다.
+// 논리 경로(/api/likestatus/*)로 { contents, <field> }를 보낸다.
+// 전송자(authFetch)가 CMS /authapi 경로로 바꾸고 Bearer 로 사용자를 식별시킨다.
 
 import type { Content } from "../types/contents";
 import { authFetch } from "../config";

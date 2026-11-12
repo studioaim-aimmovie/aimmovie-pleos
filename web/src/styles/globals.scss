@@ -145,8 +145,7 @@ html[lang="en"] {
 }
 
 /* 영문(en): 자간을 기본값(normal)으로. 전역의 음수 letter-spacing은 Pretendard/한글 기준이라
-   HostGrotesk(라틴)엔 과하다. 산재한 선언(특이도↑)을 덮기 위해 * + !important로 강제.
-   (apps/web globals.scss 에서 옮겼다 — 세로 디자인이 apps/web 모바일과 같아야 한다.) */
+   HostGrotesk(라틴)엔 과하다. 산재한 선언(특이도↑)을 덮기 위해 * + !important로 강제. */
 html[lang="en"] * {
     letter-spacing: normal !important;
 }
@@ -508,40 +507,38 @@ button {
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    // max-height 제거(apps/web 과 동일): 딱 N줄 이론값으로 자르면 크롬이 라인박스 서브픽셀
+    // max-height 를 두지 않는다: 딱 N줄 이론값으로 자르면 크롬이 라인박스 서브픽셀
     // 반올림 때문에 마지막 줄을 잘라 한 줄 덜 보였다. 줄 수 제한은 -webkit-line-clamp 가 맡는다.
     -webkit-line-clamp: $line-clamp;
 }
 
 // ── 레이아웃 분기 — **폭이 아니라 창 비율로 나눈다** ──
 //
-// apps/web 은 폭(≤1032 모바일 / ≥1033 데스크탑)으로 나누지만, Pleos 는 3구역 멀티윈도우라
+// Pleos 는 3구역 멀티윈도우라
 // 같은 앱 창이 세로 1구역(약 840×1212) ↔ 가로 2구역(약 1700×1212) ↔ 전체(2560×1380)를 오간다.
 // 840 은 폭 기준으로는 "태블릿"이지만 실제로는 길쭉한 세로 창이라 모바일 디자인이 맞다.
 //
-// 규칙은 차량 네이티브 앱(car/pleos/.../ui/layout/LayoutMode.kt)과 같다:
-//   폭 ≤ 높이  또는  폭 < 600px  →  세로(portrait) = apps/web 모바일 디자인(mobile_style)
-//   그 외                         →  가로(landscape) = TV 디자인(web_style)
+// 규칙:
+//   폭 ≤ 높이  또는  폭 < 600px  →  세로(portrait) = mobile_style
+//   그 외                         →  가로(landscape) = web_style
 // `orientation: portrait` 는 "높이 ≥ 폭"이라 첫 조건과 정확히 같다.
 //
 // ⚠️ JS 쪽 같은 판정은 `src/hooks/useLayoutMode.ts` 에 있다. 기준을 바꾸면 함께 바꾼다.
 //
-// 믹스인 이름(mobile/desktop/phone/tablet)은 apps/web 의 것을 그대로 둔다 — 옮겨 온
-// mobile_style·tablet_style·web_style 를 한 줄도 고치지 않고 이 기준으로 돌리기 위해서다.
+// 믹스인 이름(mobile/desktop/phone/tablet)은 mobile_style·tablet_style·web_style 이 쓰는 이름이다.
 $layout-min-landscape: 600px;
-// 세로 창 안의 폰/태블릿 경계는 apps/web 과 같은 767/768 이다(840 세로 구역은 "태블릿"이 된다
-// — apps/web 모바일을 같은 840 폭으로 열었을 때와 같은 규칙이 걸리게 하려는 것이다).
+// 세로 창 안의 폰/태블릿 경계는 767/768 이다(840 세로 구역은 "태블릿"이 된다).
 $phone-max: 767px;
 $tablet-min: 768px;
 
-// 세로(= apps/web 의 mobile).
+// 세로.
 @mixin mobile {
     @media (orientation: portrait), (max-width: $layout-min-landscape - 1px) {
         @content;
     }
 }
 
-// 가로(= apps/web 의 desktop).
+// 가로.
 @mixin desktop {
     @media (orientation: landscape) and (min-width: $layout-min-landscape) {
         @content;
@@ -556,7 +553,7 @@ $tablet-min: 768px;
     }
 }
 
-// 세로 중 태블릿 폭(≥768). apps/web 은 상한 1032 를 두지만, 여기서는 세로인 한 상한이 없다
+// 세로 중 태블릿 폭(≥768). 세로인 한 상한이 없다
 // (세로 창이 1033 이상이 되는 구역은 없고, 생기더라도 데스크탑으로 넘기면 안 된다).
 @mixin tablet {
     @media (orientation: portrait) and (min-width: $tablet-min) {
@@ -584,7 +581,7 @@ $point_1: #a262ff;
 $point_2: #c17141;
 $blue_1: #d1feff;
 
-// 상태 색 — 브리프에서 확정된 값이다. apps/web/styles/globals.scss 와 값을 맞춘다.
+// 상태 색 — 브리프에서 확정된 값이다.
 $red_1: #ff778d; // 경고: 실패·오류
 $mint_1: #5eecff; // 주의: 조심해서 진행해야 하는 안내
 $gray_cool: #909aaa; // 자잘한 폰트: 안내·각주·부가 정보

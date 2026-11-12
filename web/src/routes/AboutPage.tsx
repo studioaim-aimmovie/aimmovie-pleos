@@ -1,4 +1,4 @@
-// 회사 정보 — apps/web 의 app/(view)/about/page.tsx 대응.
+// 회사 정보.
 
 import BackButton from "@/components/BackButton";
 import AboutWrap from "@/components/about_wrap";

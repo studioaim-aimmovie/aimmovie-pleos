@@ -14,9 +14,8 @@ export type { RentTarget };
 const RENT_ENABLED = import.meta.env.VITE_RENT_ENABLED !== "false";
 
 // 유료 대여 흐름 공용 훅. 상세페이지·플레이어가 start()만 호출하고 modals 를 렌더한다.
-// apps/tv 의 useRentFlow 에서 옮겼다.
 //
-// ⚠️ 차량에는 충전(PortOne) 단계가 없다(차량 네이티브 앱과 같은 1차 제외 항목).
+// ⚠️ 차량에는 충전(PortOne) 단계가 없다.
 // 잔고가 부족하면 폰/PC 에서 충전하도록 안내만 한다. 대여(unlock)·잔고 조회는 그대로 쓴다.
 // 안내는 window.alert 대신 ConfirmModal 로 띄운다(WebView 셸이 alert 를 삼킬 수 있다).
 export function useRentFlow() {

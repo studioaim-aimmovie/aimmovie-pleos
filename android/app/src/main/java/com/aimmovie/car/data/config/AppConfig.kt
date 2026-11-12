@@ -3,7 +3,7 @@
 // core 는 앱이 부팅 시 configure() 로 호스트를 주입받는다. 차량 앱은 그 값을 BuildConfig 에서 받는다
 // (debug = 로컬 CMS, release = 운영 CMS — app/build.gradle.kts 참고).
 //
-// authFetch / sendBeacon 주입은 옮기지 않았다. 차량 앱은 TV 와 같이 CMS 를 Bearer 로 직접 부르는
+// authFetch / sendBeacon 주입은 없다. 네이티브는 CMS 를 Bearer 로 직접 부르는
 // 한 가지 방식뿐이라 전송자를 갈아 끼울 일이 없다. 그 역할은 data/auth/ApiClient.kt 가 맡는다.
 package com.aimmovie.car.data.config
 

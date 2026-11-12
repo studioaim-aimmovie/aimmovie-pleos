@@ -1,11 +1,10 @@
-// 앱 셸 — 라우터 + Provider 구성. apps/tv 의 App.tsx 에서 옮겼다.
+// 앱 셸 — 라우터 + Provider 구성.
 //
 // ⚠️ HashRouter 를 쓴다.
 // 패키지 파일(file:// 또는 셸의 로컬 에셋 오리진)에는 경로를 매핑해 줄 서버가 없어
 // History API 라우터는 새로고침·딥링크에서 깨진다. 해시 라우팅이면 진입점이 index.html 하나로 고정된다.
 //
-// 뒤로 가기: TV 는 리모컨 Back 키를 직접 받아 자체 스택(backStack)을 돌렸지만, 차량은 Android
-// 시스템 뒤로가기다. 셸이 WebView.canGoBack()/goBack() 으로 넘기면 해시 라우팅의 브라우저
+// 뒤로 가기: Android 시스템 뒤로가기다. 셸이 WebView.canGoBack()/goBack() 으로 넘기면 해시 라우팅의 브라우저
 // history 가 그대로 이전 화면으로 돌아간다 — 웹 쪽에 키 처리가 필요 없다.
 //
 // ⚠️ 레이아웃(세로/가로)으로 라우트 트리를 가르지 않는다. 창 구역이 840↔1700 으로 바뀔 때
@@ -69,11 +68,10 @@ function ScrollResetOnNavigate() {
 /**
  * 게스트 접근 제어.
  *
- * apps/web 의 AuthGuard 와 동일한 정책(auth/guestPolicy.ts)과 동일한 안내 흐름을 쓴다.
+ * 정책은 auth/guestPolicy.ts 를 따른다.
  * 허용되지 않은 경로에 미로그인으로 들어오면 **먼저 확인 모달로 안내한 뒤**,
- * [로그인]을 고르면 페어링 화면으로, [취소]를 고르면 홈으로 보낸다.
- * (예전에는 모달 없이 곧바로 페어링 화면으로 넘겼는데, 사용자가 왜 화면이 바뀌었는지
- *  알 수 없어 web 과 같은 안내 단계를 되살렸다.)
+ * [로그인]을 고르면 페어링 화면으로, [취소]를 고르면 홈으로 보낸다
+ * (모달 없이 곧바로 넘기면 사용자가 왜 화면이 바뀌었는지 알 수 없다).
  *
  * 차단된 화면의 본문은 렌더하지 않는다. 상세·마이페이지 같은 화면은 마운트되는 순간
  * 로그인 전제의 조회를 시작하므로, 모달 뒤에서 실패한 조회 화면이 비쳐 보이게 된다.
@@ -100,7 +98,7 @@ function GuestGate({ children }: { children: React.ReactNode }) {
                     message={t("common.login_message")}
                     confirmLabel={t("common.login")}
                     cancelLabel={t("common.cancel")}
-                    // 차단된 화면에는 머물 수 없으므로 딤 배경 클릭으로 닫지 못하게 막는다(web 과 동일).
+                    // 차단된 화면에는 머물 수 없으므로 딤 배경 클릭으로 닫지 못하게 막는다.
                     dismissible={false}
                     onConfirm={() => navigate("/login", { replace: true })}
                     onClose={() => navigate("/", { replace: true })}

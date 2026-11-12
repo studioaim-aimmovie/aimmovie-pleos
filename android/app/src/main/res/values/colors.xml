@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- ui/theme/Color.kt 의 Background 와 같은 값 (apps/tv/src/styles 의 #151a23) -->
+    <!-- ui/theme/Theme.kt 의 Background 와 같은 값 -->
     <color name="background">#FF151A23</color>
 </resources>

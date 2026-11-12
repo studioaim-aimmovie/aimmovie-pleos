@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 export const useMotionObserver = () => {
     useEffect(() => {
         const motionConfigs = [
@@ -48,43 +48,6 @@ export const useMotionObserver = () => {
                 observers.push(observer);
             }
         });
-
-        const motion3Targets = document.querySelectorAll(".motion_target3");
-        const motion4Targets = document.querySelectorAll(".motion_target4");
-        const handleScroll = () => {
-            motion3Targets.forEach((target) => {
-                const rect = target.getBoundingClientRect();
-                const windowHeight = window.innerHeight;
-                // console.log(rect, windowHeight)
-
-                const elementTop = rect.top;
-                const elementHeight = rect.height;
-
-                let num = 0;
-
-                if (elementTop < windowHeight && elementTop + elementHeight > 0) {
-                    const viewArea = Math.min(windowHeight - elementTop, elementHeight); //둘 중 더 작은 값 반환
-                    num = Math.max(0, Math.min(1, viewArea / elementHeight));
-                }
-                (target as HTMLElement).style.opacity = num.toString();
-            });
-            motion4Targets.forEach((target) => {
-                const rect = target.getBoundingClientRect();
-                const windowHeight = window.innerHeight;
-
-                const elementTop = rect.top;
-                const elementHeight = rect.height;
-
-                let num = 0;
-
-                if (elementTop < windowHeight && elementTop + elementHeight > 0) {
-                    const viewArea = Math.min(windowHeight - elementTop, elementHeight);
-                    num = Math.max(0, Math.min(1, viewArea / elementHeight));
-                }
-                (target as HTMLElement).style.opacity = num.toString();
-                (target as HTMLElement).style.transform = `translateY(${(1 - num) * 50}px)`;
-            });
-        };
 
         return () => {
             observers.forEach((observer) => observer.disconnect());

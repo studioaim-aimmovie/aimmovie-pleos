@@ -3,8 +3,7 @@ import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 
 /**
- * apps/pleos — apps/tv 의 vite.config.ts 를 옮겼다. 빌드 산출물(dist)을 차량 APK 셸이
- * 패키지 파일로 싣고 WebView 로 띄운다(androidtv 래퍼와 같은 패키지형).
+ * 빌드 산출물(dist)을 차량 APK 셸이 패키지 파일로 싣고 WebView 로 띄운다.
  *
  * ⚠️ file:// 에서는 ES 모듈 스크립트가 로드되지 않는다.
  *
@@ -44,8 +43,7 @@ function fileProtocolClassicScript(): Plugin {
 export default defineConfig({
     plugins: [react(), fileProtocolClassicScript()],
     resolve: {
-        // tsconfig 의 paths 는 Vite 가 읽지 않는다. 같은 별칭을 여기에도 정의한다
-        // (apps/web 에서 이식한 컴포넌트가 "@/lib/cn" 형태를 그대로 쓴다).
+        // tsconfig 의 paths 는 Vite 가 읽지 않는다. 같은 별칭을 여기에도 정의한다.
         alias: {
             "@": fileURLToPath(new URL("./src", import.meta.url)),
         },
@@ -56,11 +54,9 @@ export default defineConfig({
     base: "./",
 
     build: {
-        // 엔진 하한. 차량 셸은 minSdk 28(Android 9, car/pleos 와 같은 값)이라 Android System WebView 가
-        // 따로 업데이트되며, Android 9 의 WebView 상한은 TV 표의 "Android 8.0 이상 = 138" 보다 높다.
-        // 그래도 TV 와 같은 chrome108 로 둔다 — `packages/core` 를 apps/tv 와 함께 쓰므로 같은 문법
-        // 하한을 지키는 편이 안전하고, AAOS 이미지에 내장된 WebView 가 Play 업데이트를 받지 못하는
-        // 기기(제조사 이미지 고정)가 있을 수 있다. 실기 WebView 버전을 확인하면 올려도 된다.
+        // 엔진 하한. 차량 셸은 minSdk 28(Android 9)이라 Android System WebView 가 따로 업데이트되지만,
+        // AAOS 이미지에 내장된 WebView 가 Play 업데이트를 받지 못하는 기기(제조사 이미지 고정)가
+        // 있을 수 있어 chrome108 로 낮게 둔다. 실기 WebView 버전을 확인하면 올려도 된다.
         target: "chrome108",
         outDir: "dist",
         // 패키지 앱은 CDN 캐시가 없고 스토어 심사마다 통째로 교체된다.
@@ -86,7 +82,7 @@ export default defineConfig({
 
     server: {
         host: true,
-        // apps/web(3000)·apps/tv(5173)와 겹치지 않게 5174 로 고정한다.
+        // 개발 서버 포트를 5174 로 고정한다.
         //
         // CMS(app.js)의 CORS 화이트리스트(WEB_ORIGINS)에는 5174 가 없지만 추가할 필요가 없다.
         // 화이트리스트 밖 오리진에는 CMS 가 `Access-Control-Allow-Origin: *`(credentials 불가)로

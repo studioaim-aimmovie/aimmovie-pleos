@@ -5,7 +5,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-/** 이어보기 보고 시점 — web player.tsx / TV Play.tsx 의 saveProgress 규칙 + 차량 앱의 30초 주기 보고. */
+/** 이어보기 보고 시점 — web/src/routes/Play.tsx 의 saveProgress 규칙 + 30초 주기 보고. */
 class WatchReporterTest {
     private data class Sent(val video: String, val play: Double, val percent: Double)
 

@@ -1,5 +1,4 @@
-// 마이페이지 본문 — apps/tv 의 mylist_wrap 에서 옮겼다(원본: apps/web components/sub/mylist_wrap.tsx).
-// 마크업은 apps/web 과 같아 세로·가로를 CSS 가 나눈다. 포커스 래퍼만 걷어내고 `<Link>`/`<button>` 으로 되돌렸다.
+// 마이페이지 본문. 세로·가로를 CSS 가 나눈다.
 
 import { useEffect, useState } from "react";
 import Link from "@/compat/Link";
@@ -57,8 +56,7 @@ export default function MyListWrap() {
     const [withdrawOpen, setWithdrawOpen] = useState(false);
 
     // 로그아웃하면 AuthContext 가 상태를 지우고 GuestGate 가 이 화면을 막는다.
-    // (TV 판은 여기서 alert 를 띄웠지만, WebView 셸에 따라 alert 가 삼켜질 수 있어 뺐다 —
-    //  화면이 곧바로 로그인 안내로 바뀌는 것으로 충분히 드러난다.)
+    // alert 는 띄우지 않는다(WebView 셸에 따라 삼켜질 수 있다) — 화면이 곧바로 로그인 안내로 바뀐다.
     const handleLogout = async () => {
         await logout();
     };
@@ -154,11 +152,11 @@ export default function MyListWrap() {
                 <div className="panel_cont motion_target1">
                     <ul className="account_menu">
                         {/* 비밀번호 변경. /pwinquiry 는 로그인한 본인만 들어오고 서버가 Bearer
-                            토큰으로 사용자를 판별하므로 web 처럼 `?id=` 를 붙이지 않는다.
+                            토큰으로 사용자를 판별하므로 `?id=` 를 붙이지 않는다.
 
                             ⚠️ `isSocial` 은 지금 사실상 항상 false 다 — compat/session 의 useSession
                             이 `is_social` 을 채우지 않는다(페어링 응답에 실려 오지 않는다). 세션이 그
-                            값을 싣게 되면 web 과 같은 규칙(비밀번호 없는 계정에는 감춘다)이 곧바로 적용된다. */}
+                            값을 싣게 되면 비밀번호 없는 계정에는 감추는 규칙이 곧바로 적용된다. */}
                         {!isSocial && (
                             <li>
                                 <Link href="/pwinquiry">{t("mypage.changepassword")}</Link>

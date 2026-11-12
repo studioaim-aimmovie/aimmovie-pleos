@@ -1,9 +1,9 @@
-// 원본: apps/tv/src/routes/Play.tsx 의 resolvePlaySetup · handleEndedImpl
+// 짝: web/src/routes/Play.tsx 의 resolvePlaySetup · handleEndedImpl
 //
 // 재생 준비에 필요한 값(재생할 회차·권한 재확인·이어보기 위치·다음 회차)을 한 번에 해석한다. 네트워크·플레이어 없이
-// 콘텐츠와 시청 상태만 받는 순수 함수라 단위 테스트로 TV 동작과 맞춘다.
+// 콘텐츠와 시청 상태만 받는 순수 함수라 단위 테스트로 확인한다.
 //
-// 권한을 여기서 다시 확인하는 이유: 웹(`apps/pleos` 의 /play)이 권한을 확인한 회차만 넘기지만, 재실행 복원은 웹을 거치지
+// 권한을 여기서 다시 확인하는 이유: 웹(/play)이 권한을 확인한 회차만 넘기지만, 재실행 복원은 웹을 거치지
 // 않고 저장해 둔 재생 요청으로 플레이어를 바로 연다. 그 사이 대여가 만료됐을 수 있어 막힌 영상이면 웹 화면으로 돌아간다.
 package com.aimmovie.car.ui.play
 
@@ -13,7 +13,7 @@ import com.aimmovie.car.data.model.Content
 import com.aimmovie.car.data.model.Video
 import com.aimmovie.car.domain.Contents
 
-/** 영상이 끝났을 때 다음 회차를 어떻게 할지(TV handleEndedImpl 분기). */
+/** 영상이 끝났을 때 다음 회차를 어떻게 할지(web handleEndedImpl 분기). */
 enum class NextPlan {
     /** 무료, 또는 유료지만 시청권(able)이 있다 → 바로 이어 재생. */
     AutoPlay,
@@ -24,7 +24,7 @@ enum class NextPlan {
      */
     Rent,
 
-    /** 결제 유형 미설정 등 — 아무것도 하지 않는다(TV 와 같다). */
+    /** 결제 유형 미설정 등 — 아무것도 하지 않는다. */
     None,
 }
 
@@ -83,7 +83,7 @@ object PlaySetupResolver {
         val video = Contents.findVideoById(content, videoId.ifEmpty { null })
         if (video == null || video.id.isEmpty()) return PlaySetup(video = null)
 
-        // 서버측 게이트가 없으므로 여기서 유료 권한을 확인한다(TV 와 같다).
+        // 서버측 게이트가 없으므로 여기서 유료 권한을 확인한다.
         if (video.price == PAID && statusMap[video.id]?.able != true) return PlaySetup(video = video, blocked = true)
 
         val current = content.seasons.firstOrNull { it.video?.id == video.id }
@@ -112,7 +112,7 @@ object StartPosition {
     /**
      * 시작 위치(ms).
      *  - [routeStartMs] 가 0 이상: 그 위치(웹이 해석한 이어보기 위치, 또는 재실행 복원 시 ShellStateStore 가 담아 둔 마지막 재생 위치).
-     *  - [PlayRequest.RESUME]: 서버 이어보기 위치(다음 회차로 넘어갈 때). 0 이거나 사실상 끝(끝 3초 이내)이면 처음부터(TV 와 같다).
+     *  - [PlayRequest.RESUME]: 서버 이어보기 위치(다음 회차로 넘어갈 때). 0 이거나 사실상 끝(끝 3초 이내)이면 처음부터.
      * 명시 위치도 사실상 끝이면 처음부터 본다 — 다 본 영상을 다시 열었는데 바로 종료되면 안 되기 때문이다.
      */
     fun resolveMs(routeStartMs: Long, savedPlaySec: Double, durationSec: Double): Long {

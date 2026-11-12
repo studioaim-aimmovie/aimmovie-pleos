@@ -1,19 +1,13 @@
-// 정적 UI 문자열 i18n 사전 진입점 (밑작업 골격).
-// 언어 감지(쿠키)·Provider·useT 훅은 이후 단계에서 추가. 여기서는 사전과 조회 함수만 제공한다.
+// 정적 UI 문자열 i18n 사전 진입점. 사전과 조회 함수만 제공한다(Provider·useT 는 web/src/i18n/LocaleProvider.tsx).
 import ko, { type MessageKey } from "./ko";
 import en from "./en";
 import type { Lang } from "./locale";
 
-// 지원 언어 타입은 lib/locale.ts가 단일 출처. 여기서 재노출.
+// 지원 언어 타입은 locale.ts가 단일 출처. 여기서 재노출.
 export type { Lang };
 export type { MessageKey };
 
 export const messages = { ko, en } as const;
-
-/** 해당 언어의 사전 전체를 반환(없으면 ko). */
-export function getMessages(lang: Lang): Record<MessageKey, string> {
-    return messages[lang] ?? messages.ko;
-}
 
 /** t()의 값 보간용: 문자열 내 {name} 토큰을 vars.name으로 치환. */
 export type TVars = Record<string, string | number>;

@@ -1,4 +1,4 @@
-// 대여 흐름 훅(useRentFlow)의 공용 계약 — web/tv판과 mobile판이 같은 타입을 공유한다.
+// 대여 흐름 훅(useRentFlow)의 공용 계약.
 export interface RentTarget {
     /** 대여(차감) 대상 영상 _id */
     videoId: string;

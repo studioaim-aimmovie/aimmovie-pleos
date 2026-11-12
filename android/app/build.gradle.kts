@@ -9,8 +9,7 @@ plugins {
 }
 
 // 릴리스 서명 설정.
-// AimMovie/key.properties.example 을 key.properties 로 복사해 채운다.
-// 앱 ID(com.aimmovie.car)가 모바일·TV(com.aimmovie)와 분리되어 있으므로 차량 앱 전용 키스토어를 쓴다.
+// android/key.properties.example 을 key.properties 로 복사해 채운다. 차량 앱 전용 키스토어를 쓴다.
 val keystorePropertiesFile = rootProject.file("key.properties")
 val hasReleaseKeystore = keystorePropertiesFile.exists()
 val keystoreProperties = Properties().apply {
@@ -21,23 +20,21 @@ val keystoreProperties = Properties().apply {
 
 android {
     // applicationId 와 같게 맞춰 둔다 — deploy.sh 의 `am start -n <applicationId>/.MainActivity` 가
-    // 앞점(.) 표기를 applicationId 기준으로 확장하기 때문이다(tv/androidtv 에서 겪은 문제).
+    // 앞점(.) 표기를 applicationId 기준으로 확장하기 때문이다.
     namespace = "com.aimmovie.car"
     compileSdk = 35
 
     defaultConfig {
-        // 모바일·TV(com.aimmovie)와 분리한다. 코드베이스가 다른 앱이라 Firebase·Google 로그인처럼
-        // "패키지명 + 서명 인증서"로 묶이는 설정이 섞이지 않게 하려는 것이다.
         applicationId = "com.aimmovie.car"
         // Pleos 문서 요구사항: 서명 키 rotation/lineage(APK 서명 v3.1)를 위해 28 이상.
         minSdk = 28
         // Pleos Connect Emulator 가 API 34 기반이다.
         targetSdk = 34
-        // 모바일 1~999 / TV 1000~ / 차량 2000~ 으로 레인지를 분리해 관리한다.
+        // 차량 앱은 2000 부터 쓴다.
         versionCode = 2000
         versionName = "0.1.0"
 
-        // 미디어 CDN 은 web/mobile/tv 가 모두 같은 호스트를 쓴다(apps/tv/.env.production).
+        // 미디어 CDN 호스트(web/.env.* 의 VITE_CDN_URL 과 같은 값).
         buildConfigField("String", "CDN_URL", "\"https://cdn.aimmoviestream.com\"")
     }
 
@@ -55,7 +52,7 @@ android {
     }
 
     buildTypes {
-        // CMS(API) 호스트. apps/tv 의 .env.development / .env.production 과 같은 축이다.
+        // CMS(API) 호스트. web/.env.development / .env.production 과 같은 축이다.
         //  - debug   : 로컬 CMS(aimmovie_admin, 8066)를 기기의 localhost 로 본다. `adb reverse tcp:8066 tcp:8066`
         //              (deploy.sh 가 자동으로 건다)로 기기의 8066 을 PC 로 넘기므로 에뮬레이터·USB 실기 모두 같은 주소로 된다.
         //              10.0.2.2 는 에뮬레이터 안에서만 호스트를 가리켜, 실기에서는 "네트워크 연결을 확인해주세요"가 뜬다.
@@ -93,7 +90,7 @@ android {
     }
 }
 
-// 웹 번들(apps/pleos)은 scripts/build.sh → stage-web.sh 가 빌드 타입별 소스셋(src/<debug|release>/assets)에 넣는다.
+// 웹 번들(web/)은 build.sh → scripts/stage-web.sh 가 빌드 타입별 소스셋(src/<debug|release>/assets)에 넣는다.
 // gradlew 를 바로 돌려 스테이징 없이 APK 를 만들면 WebView 가 빈 화면이 되므로 경고를 남긴다(테스트·lint 만 돌릴 때를 위해
 // 실패시키지는 않는다).
 tasks.matching { it.name == "assembleDebug" || it.name == "assembleRelease" }.configureEach {
@@ -128,7 +125,7 @@ dependencies {
     // 플레이어. 1.8.0 은 compileSdk 35 를 요구하며(aar-metadata minCompileSdk=35) 이 프로젝트와 맞는다.
     //  - hls: 비DRM 본편(hls_path) / dash: DRM 본편(dash_path + Widevine)
     //  - ui: PlayerView(영상 표면·비율 맞춤)만 쓰고 컨트롤은 Compose 로 직접 그린다(터치 76dp 기준).
-    //    Compose 는 이제 재생 화면(PlayerActivity)에만 쓴다 — 나머지 화면은 웹 번들(apps/pleos)이다.
+    //    Compose 는 재생 화면(PlayerActivity)에만 쓴다 — 나머지 화면은 웹 번들(web/)이다.
     //  - session: MediaSessionService — Pleos 필수 요건(시스템 미디어 컨트롤 play/pause/stop).
     val media3 = "1.8.0"
     implementation("androidx.media3:media3-exoplayer:$media3")

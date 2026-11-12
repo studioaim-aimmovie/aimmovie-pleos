@@ -1,9 +1,8 @@
-// 회원 탈퇴 바텀시트 — apps/web 의 components/sub/WithdrawSheet.tsx 를 옮겼다(마크업·클래스 동일).
+// 회원 탈퇴 바텀시트.
 //
-// apps/web 과 다른 점:
 //  - 탈퇴 실패를 `window.alert` 대신 버튼 위 인라인 문구(`.sheet_error`)로 알린다. WebView 셸이
-//    WebChromeClient.onJsAlert 를 구현하지 않으면 alert 가 조용히 삼켜진다(apps/tv 의 대응 유지).
-//  - 완료 후 로그아웃은 AuthContext 의 logout 을 쓴다. web 의 `location.href = "/"` 는 패키지
+//    WebChromeClient.onJsAlert 를 구현하지 않으면 alert 가 조용히 삼켜진다.
+//  - 완료 후 로그아웃은 AuthContext 의 logout 을 쓴다. `location.href = "/"` 는 패키지
 //    오리진에서 "/" 가 파일시스템 루트로 풀려 화면이 깨진다.
 
 import { useState } from "react";

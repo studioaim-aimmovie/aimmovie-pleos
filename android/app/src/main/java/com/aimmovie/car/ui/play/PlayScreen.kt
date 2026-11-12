@@ -1,7 +1,5 @@
-// 원본: apps/tv/src/routes/Play.tsx (화면·자동 숨김·오류 처리), apps/tv/src/player/Controls.tsx (컨트롤 구성·시간 표기)
-//
 // 터치 전용 재생 화면(PlayerActivity 가 띄운다). 탭하면 컨트롤을 보이거나 숨기고, 재생 중이면 몇 초 뒤 저절로 숨긴다(정지 중에는 숨기지 않는다).
-// TV 의 리모컨·포커스 계층은 옮기지 않는다 — 차량은 터치만 쓴다(버튼은 Pleos 터치 기준 76dp 이상).
+// 버튼은 Pleos 터치 기준 76dp 이상이다.
 //
 // 영상 표면(PlayerView)은 RESIZE_MODE_FIT 로 비율을 지키며 화면 안에 맞춘다. 남는 검은 여백은 플레이어 안의 것이고
 // 앱 창 자체는 구역 크기를 그대로 채운다(레터박스 아님). 구역 전환(세로 1구역 ↔ 가로 2구역)은 Activity 재생성 없이
@@ -82,13 +80,13 @@ import com.aimmovie.car.ui.theme.TextSecondary
 import com.aimmovie.car.ui.theme.TextStrong
 import kotlinx.coroutines.delay
 
-/** 조작이 없으면 이만큼 뒤에 컨트롤을 감춘다(TV CONTROLS_HIDE_MS 와 같다). */
+/** 조작이 없으면 이만큼 뒤에 컨트롤을 감춘다. */
 private const val CONTROLS_HIDE_MS = 5_000L
 
 /** 버퍼링·준비가 이만큼 넘게 걸리면 "불러오는 중…" 문구를 더한다. 짧은 끊김에 글자가 번쩍이지 않게 한다. */
 private const val LONG_WAIT_MS = 2_000L
 
-/** 플레이어를 닫는 이유. 웹에 onPlaybackFinished 의 reason 으로 그대로 전달된다(apps/pleos src/native/bridge.ts). */
+/** 플레이어를 닫는 이유. 웹에 onPlaybackFinished 의 reason 으로 그대로 전달된다(web/src/native/bridge.ts). */
 enum class PlayExit(val wire: String) {
     Closed("closed"),
     Ended("ended"),
@@ -122,7 +120,7 @@ fun PlayScreen(vm: PlayViewModel, onExit: (PlayExit) -> Unit) {
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 
-    // 유료 미구매(재실행 복원 사이 대여가 만료된 경우 등)는 웹 화면으로 돌려보낸다(TV <Navigate replace>).
+    // 유료 미구매(재실행 복원 사이 대여가 만료된 경우 등)는 웹 화면으로 돌려보낸다.
     LaunchedEffect(state.phase) { if (state.phase == PlayPhase.Blocked) exit(PlayExit.Blocked) }
     // 끝까지 봤고 이어 볼 회차가 없다.
     LaunchedEffect(state.finished) { if (state.finished) exit(PlayExit.Ended) }
@@ -131,7 +129,7 @@ fun PlayScreen(vm: PlayViewModel, onExit: (PlayExit) -> Unit) {
     // 조작할 때마다 올려 자동 숨김 타이머를 처음부터 다시 센다.
     var interaction by remember { mutableIntStateOf(0) }
     val poke: () -> Unit = { interaction++ }
-    // 정지 상태에서는 감추지 않는다 — 화면만 멈춰 있으면 사용자가 조작 방법을 잃는다(TV showControls 와 같다).
+    // 정지 상태에서는 감추지 않는다 — 화면만 멈춰 있으면 사용자가 조작 방법을 잃는다.
     // 시스템 미디어 컨트롤로 멈춘 경우에도 컨트롤을 다시 띄운다.
     LaunchedEffect(state.paused) { if (state.paused) controlsVisible = true }
     LaunchedEffect(controlsVisible, state.paused, interaction) {
@@ -398,7 +396,7 @@ private fun SeekButton(forward: Boolean, label: String, contentDescription: Stri
     }
 }
 
-/** 초 → "1:02:03" / "02:03"(TV Controls.tsx formatClock). */
+/** 초 → "1:02:03" / "02:03". */
 internal fun formatClock(ms: Long): String {
     val total = (ms.coerceAtLeast(0) / 1000)
     val h = total / 3600

@@ -1,6 +1,4 @@
-// 팝콘 충전 상품 카탈로그 — 가격의 단일 진실원본(서버·클라 공용).
-// 프론트 표시 + 서버 결제금액 검증(위변조 방지)에 함께 사용한다.
-// (추후 CMS로 옮길 수 있으나, 지금은 서버가 소유해 금액검증의 기준으로 삼는다.)
+// 팝콘 충전 상품 카탈로그. 충전 안내 화면(PopcornPage)이 표시용으로 쓴다.
 
 export interface PopcornProduct {
     /** 상품 식별자(결제 요청/검증 키) */
@@ -26,21 +24,6 @@ export const POPCORN_PRODUCTS: PopcornProduct[] = [
     { id: "pc_50000", amount: 50000, base: 500, bonus: 50 },
     { id: "pc_100000", amount: 100000, base: 1000, bonus: 100 },
 ];
-
-/** 상품 id로 조회. 없으면 undefined. */
-export function getPopcornProduct(id?: string): PopcornProduct | undefined {
-    return POPCORN_PRODUCTS.find((p) => p.id === id);
-}
-
-/** 총 지급 팝콘(기본+보너스). */
-export function totalPopcorn(p: PopcornProduct): number {
-    return p.base + p.bonus;
-}
-
-/** 결제창에 표시할 주문명. */
-export function popcornOrderName(p: PopcornProduct): string {
-    return `팝콘 ${totalPopcorn(p)}개`;
-}
 
 /** 보너스 비율(%) — UI 배지용. */
 export function bonusPercent(p: PopcornProduct): number {

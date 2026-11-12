@@ -1,4 +1,4 @@
-// 크리에이터 지원 — apps/web 의 app/(view)/creator/page.tsx 대응.
+// 크리에이터 지원.
 
 import BackButton from "@/components/BackButton";
 import CreatorWrap from "@/components/creator_wrap";

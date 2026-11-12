@@ -1,5 +1,5 @@
 /**
- * 네이티브 HLS 어댑터 — `<video src="…m3u8">` 로 직접 재생한다. apps/tv 의 html5.ts 에서 옮겼다.
+ * 네이티브 HLS 어댑터 — `<video src="…m3u8">` 로 직접 재생한다.
  *
  * Android WebView(Chromium)는 네이티브 HLS 를 지원하지 않으므로 차량에서 이 경로를 타는 일은
  * 거의 없다. MSE 가 없는 환경(`Hls.isSupported()` 가 false)의 마지막 폴백으로만 남긴다.
@@ -271,7 +271,7 @@ export function createVideoElementAdapter(
             if (destroyed) return;
             ended = false;
             void video.play().catch((e: unknown) => {
-                // TV에는 자동재생 정책 차단이 없지만, 상태 전이 중 호출은 실패할 수 있다.
+                // 상태 전이 중 호출은 실패할 수 있다.
                 console.warn(`[player:${hooks.kind}] play() 실패`, e);
             });
         },

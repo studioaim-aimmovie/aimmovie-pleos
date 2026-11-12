@@ -1,12 +1,9 @@
-// 헤더 — apps/web 의 components/common/Header.tsx 를 옮겼다(세로=모바일, 가로=데스크탑 마크업을
-// 함께 그리고 CSS 의 m_only/d_only 가 하나만 보이게 한다. apps/web 과 같은 방식이다).
+// 헤더(세로=모바일, 가로=데스크탑 마크업을 함께 그리고 CSS 의 m_only/d_only 가 하나만 보이게 한다).
 //
-// apps/web 과 다른 점:
-//  - import 를 compat 으로 바꿨다(next/* → @/compat/*).
 //  - 마이페이지 드롭다운(가로)은 hover 가 아니라 **탭으로 열고 닫는다**. 차량은 터치 전용이라
 //    hover 가 없다. 바깥을 탭하면 닫힌다.
-//  - 로그아웃은 AuthContext 의 logout 을 쓴다. web 의 `window.location.href = "/"` 는 패키지
-//    오리진(file:// 등)에서 "/" 가 파일시스템 루트로 풀려 화면이 깨진다(apps/tv 에서 실측).
+//  - 로그아웃은 AuthContext 의 logout 을 쓴다. `window.location.href = "/"` 는 패키지
+//    오리진(file:// 등)에서 "/" 가 파일시스템 루트로 풀려 화면이 깨진다.
 //  - 로그인 링크는 디바이스 페어링 화면(/login)으로 간다.
 
 import React, { useEffect, useRef, useState } from "react";
@@ -197,7 +194,7 @@ export default function Header({ menus }: HeaderProps) {
             className={`header ${scrollDirection === "down" ? "hidden" : "active"} ${topScroll === "top" ? "top" : "scroll"}`}
         >
             <div className="left">
-                {/* apps/web 과 같은 div 마크업을 유지한다 — 스타일이 요소 선택자에 걸려 있다. */}
+                {/* div 마크업을 유지한다 — 스타일이 요소 선택자에 걸려 있다. */}
                 <div className="ham_btn m_only" onClick={handleClick}>
                     <span></span>
                     <span></span>
@@ -269,7 +266,7 @@ export default function Header({ menus }: HeaderProps) {
                         className={`mypage_area${isMypageOpen ? " on" : ""}`}
                     >
                         {/* m_only/d_only는 CSS로 하나만 보이는 반응형 중복 요소다.
-                            세로는 마이페이지로 바로 가고, 가로는 드롭다운을 연다(apps/web 과 같은 구분). */}
+                            세로는 마이페이지로 바로 가고, 가로는 드롭다운을 연다. */}
                         <Link href="/mypage" className="mypage_icon m_only">
                             my page
                         </Link>

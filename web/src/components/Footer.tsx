@@ -1,8 +1,5 @@
-// 푸터 — apps/web 의 components/common/Footer.tsx 를 옮겼다(f_top/f_bottom + 사업자 정보 구조).
-//
-// apps/tv 의 푸터는 옛 구조(사업자 정보 없음)였는데, 세로 디자인이 apps/web 모바일을 그대로
-// 따라야 해서 web 의 현재 마크업으로 맞췄다. 가로에서 이 구조를 그리는 규칙은 index.scss 의
-// "푸터(가로)" 절에 apps/web web_style 의 값을 옮겨 두었다(TV web_style 은 옛 구조 기준이다).
+// 푸터(f_top/f_bottom + 사업자 정보 구조). 가로에서 이 구조를 그리는 규칙은 index.scss 의
+// "푸터(가로)" 절에 있다.
 //
 // ⚠️ 언어 전환(setLang)의 유일한 진입점이 이 푸터다. 헤더는 lang 을 읽기만 한다.
 

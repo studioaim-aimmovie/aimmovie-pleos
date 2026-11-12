@@ -5,8 +5,7 @@
 //   - 표시 언어: 제목·요약 등 텍스트를 어느 언어로 보여줄지 (resolveText/pickContents)
 //   - 편성 국가: 백엔드가 어느 국가 편성을 내려줄지 (?country=)
 //
-// apps/web 은 RSC 에서 `resolveCountry(session?.user?.country_code)` 로 계산했다.
-// 이 앱도 같은 규칙을 쓴다 — 게스트는 기본 국가(KR), 로그인 유저는 country_code.
+// 규칙: `resolveCountry(session?.user?.country_code)` — 게스트는 기본 국가(KR), 로그인 유저는 country_code.
 
 import { resolveCountry } from "@aim/core/api/country";
 import { useSession } from "@/compat/session";

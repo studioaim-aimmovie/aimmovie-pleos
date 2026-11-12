@@ -1,4 +1,3 @@
-// apps/web 의 components/common/BackButton.tsx 와 같다(import 만 compat 으로 바꿨다).
 
 import { useRouter } from "@/compat/navigation";
 import type { ReactNode } from "react";

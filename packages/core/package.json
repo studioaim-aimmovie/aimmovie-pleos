@@ -4,14 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "echo \"@aim/core: no build step — TS 소스를 각 앱(Next transpilePackages / Vite)이 직접 처리\"",
     "typecheck": "tsc -p tsconfig.json"
   },
   "exports": {
-    ".": "./src/index.ts",
     "./config": "./src/config.ts",
-    "./types/api": "./src/types/api.ts",
-    "./types/auth": "./src/types/auth.ts",
     "./types/contents": "./src/types/contents.ts",
     "./types/faq": "./src/types/faq.ts",
     "./types/main": "./src/types/main.ts",
@@ -22,18 +18,13 @@
     "./api/popcorn": "./src/api/popcorn.ts",
     "./api/likeStatus": "./src/api/likeStatus.ts",
     "./api/videoStatus": "./src/api/videoStatus.ts",
-    "./api/drm": "./src/api/drm.ts",
     "./api/user": "./src/api/user.ts",
     "./api/country": "./src/api/country.ts",
     "./api/popcornProducts": "./src/api/popcornProducts.ts",
     "./domain/contents": "./src/domain/contents.ts",
-    "./domain/kvPlayback": "./src/domain/kvPlayback.ts",
-    "./domain/focusKeys": "./src/domain/focusKeys.ts",
     "./i18n": "./src/i18n/index.ts",
     "./i18n/locale": "./src/i18n/locale.ts",
-    "./i18n/rich": "./src/i18n/rich.tsx",
-    "./i18n/ko": "./src/i18n/ko.ts",
-    "./i18n/en": "./src/i18n/en.ts"
+    "./i18n/rich": "./src/i18n/rich.tsx"
   },
   "peerDependencies": {
     "react": ">=19"

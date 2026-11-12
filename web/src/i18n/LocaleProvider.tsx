@@ -1,13 +1,11 @@
-// 표시 언어 컨텍스트 — Pleos(차량)판. apps/tv 의 LocaleProvider 에서 옮겼다.
+// 표시 언어 컨텍스트.
 //
-// ⚠️ apps/web 과 저장 매체가 다르다.
-// web 은 `lang` **쿠키**로 관리해 서버(RSC)와 클라이언트가 같은 값을 읽지만,
-// 이 앱은 APK 안 WebView 에서 패키지 파일(file:// 등)로 뜨고 서버 렌더도 없어 쿠키에 기댈 수
+// 이 앱은 APK 안 WebView 에서 패키지 파일로 뜨고 서버 렌더도 없어 쿠키에 기댈 수
 // 없다. 그래서 localStorage 에 저장한다.
-// (`@aim/core/i18n` 의 사전·t()·normalizeLang 은 그대로 재사용하고, 기기를 TV 로 못박은
+// (`@aim/core/i18n` 의 사전·t()·normalizeLang 을 쓰고, 차량에 맞지 않는
 //  문구만 `pleosMessages.ts` 에서 덮어쓴다.)
 //
-// 인터페이스는 web 의 useT/useLang 과 동일하게 맞춘다 — t(key, vars) / lang / setLang.
+// 인터페이스 — t(key, vars) / lang / setLang.
 
 import {
     createContext,
@@ -84,7 +82,7 @@ export function useLocale(): LocaleValue {
     return ctx;
 }
 
-/** `const t = useT(); t("footer.nav")` — web 의 hooks/useT.ts 와 같은 인터페이스. */
+/** `const t = useT(); t("footer.nav")` */
 export function useT(): (key: MessageKey, vars?: TVars) => string {
     return useLocale().t;
 }

@@ -1,8 +1,7 @@
-// 원본: apps/tv/src/auth/apiClient.ts
+// 짝: web/src/auth/apiClient.ts
 //
 // 인증 호출 전송자. packages/core 의 api/* 는 `/api/likestatus/mylist` 같은 **논리 경로**를 호출한다.
-// web/mobile 은 그 경로가 Next 프록시이고 프록시가 세션 쿠키를 CMS Bearer 로 바꿔 준다.
-// 차량 앱은 TV 와 같이 쿠키가 없으므로 CMS 로 직접 보낸다.
+// 차량 앱은 쿠키가 없으므로 CMS 로 직접 보낸다.
 //
 //   /api/likestatus/mylist  →  {CMS}/authapi/likestatus/mylist  + Authorization: Bearer
 package com.aimmovie.car.data.auth
@@ -43,7 +42,7 @@ class ApiClient(
     }
 
     private suspend fun endSession() {
-        // TokenStore.tokens 가 null 이 되면 AuthRepository 가 미로그인으로 바뀐다(TV 의 onSessionEnded 역할).
+        // TokenStore.tokens 가 null 이 되면 AuthRepository 가 미로그인으로 바뀐다.
         tokenStore.clearTokens()
     }
 
@@ -108,7 +107,7 @@ class ApiClient(
     }
 
     /**
-     * 인증이 필요한 호출(원본 tvAuthFetch). core 의 인증 API 는 모두 JSON POST 라 그 형태만 둔다.
+     * 인증이 필요한 호출. core 의 인증 API 는 모두 JSON POST 라 그 형태만 둔다.
      *
      * - 논리 경로를 CMS 경로로 바꾸고 Bearer 를 붙인다.
      * - access 가 곧 만료면 요청 전에 미리 갱신한다(불필요한 401 왕복 절약).

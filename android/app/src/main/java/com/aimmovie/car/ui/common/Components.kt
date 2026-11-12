@@ -1,5 +1,5 @@
-// 화면 공용 부품. 웹 셸 전환(2026-10) 뒤 네이티브로 그리는 화면은 플레이어뿐이라 그 화면이 쓰는 버튼만 남겼다.
-// 터치 전용이라 hover·focus 상태는 두지 않는다(CLAUDE.md 의 모바일 입력 규칙과 같다).
+// 화면 공용 부품. 네이티브로 그리는 화면은 플레이어뿐이라 그 화면이 쓰는 버튼만 둔다.
+// 터치 전용이라 hover·focus 상태는 두지 않는다.
 package com.aimmovie.car.ui.common
 
 import androidx.compose.foundation.layout.PaddingValues

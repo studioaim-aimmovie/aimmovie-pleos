@@ -1,7 +1,4 @@
-// 원본: mobile/lib/pages/player_page.dart (_buildDataSource · isWidevinePlayable),
-//       apps/web/app/(view)/play/[id]/page.tsx (DRM 이면 dash_path, 아니면 hls_path), docs/DRM_FRONTEND_HANDOFF.md §2
-//
-// 재생 소스 판정. 플레이어(Media3)에 의존하지 않는 순수 규칙이라 단위 테스트로 원본과 맞춘다.
+// 재생 소스 판정(DRM 이면 dash_path, 아니면 hls_path). 플레이어(Media3)에 의존하지 않는 순수 규칙이라 단위 테스트로 확인한다.
 package com.aimmovie.car.player
 
 import com.aimmovie.car.data.config.AppConfig
@@ -30,10 +27,10 @@ sealed interface PlaySource {
 
 object PlaySources {
     /**
-     * 암호화 영상을 Widevine + DASH 로 재생할 수 있는지(원본 isWidevinePlayable).
+     * 암호화 영상을 Widevine + DASH 로 재생할 수 있는지.
      *
      * CMS 의 drm.active_scheme 은 실제 DRM 시스템 이름이 아니라 암호화 여부만 나타낸다(암호화 = 'MULTI_DRM').
-     * 어떤 DRM 을 쓸지는 플랫폼이 정한다 — 원본과 같이 is_encrypted 와 manifest 유무만 본다.
+     * 어떤 DRM 을 쓸지는 플랫폼이 정한다 — is_encrypted 와 manifest 유무만 본다.
      */
     fun isWidevinePlayable(drm: StreamDrm?, dashUrl: String): Boolean = drm?.isEncrypted == true && dashUrl.isNotEmpty()
 
@@ -42,7 +39,7 @@ object PlaySources {
      *
      * @param widevineSupported 기기의 Widevine 지원 여부. 암호화 영상일 때만 부른다(MediaDrm 조회 비용을 아끼려고 지연 평가).
      *
-     * 원본(모바일)과 다른 점: 암호화 영상인데 DASH 가 없으면 모바일은 HLS 로 폴백하지만, 그 HLS 는 cbcs 암호화(FairPlay 용)라
+     * 암호화 영상인데 DASH 가 없으면 HLS 로 폴백하지 않는다. 그 HLS 는 cbcs 암호화(FairPlay 용)라
      * Android 에서 복호화할 수 없다. 재생 시도 후 실패하느니 처음부터 "재생할 수 없음"으로 둔다.
      */
     fun select(config: AppConfig, video: Video?, widevineSupported: () -> Boolean): PlaySource {

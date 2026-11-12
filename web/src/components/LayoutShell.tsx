@@ -1,7 +1,6 @@
 // 헤더/푸터 셸.
 //
-// apps/web 은 서버(app/layout.tsx)에서 메뉴를 미리 조회해 props 로 시딩했다.
-// 이 앱은 서버 렌더가 없으므로 여기서 직접 조회한다. 조회 전에는 빈 배열을 넘겨
+// 메뉴는 서버 렌더가 없으므로 여기서 직접 조회한다. 조회 전에는 빈 배열을 넘겨
 // 헤더 골격이 먼저 뜨게 한다(화면이 통째로 비는 것보다 낫다).
 //
 // ⚠️ 세로/가로로 셸을 갈라 그리지 않는다. 같은 Header·Footer 가 두 모드의 마크업을 함께 갖고
@@ -19,9 +18,9 @@ import { useMarketCountry } from "@/hooks/useMarketCountry";
 //  - /play       : 재생 화면(웹 폴백 플레이어 — 네이티브로 넘기면 곧바로 떠난다)
 //  - /login      : 페어링 화면. 아직 로그인 전이라 메뉴를 보여줄 이유가 없다
 //  - /popcorn    : 팝콘 내역과 충전 안내(각자 back 버튼을 갖는다)
-//  - /creator    : 크리에이터 지원 안내. apps/web 과 같다(본문이 자기 푸터를 그린다)
+//  - /creator    : 크리에이터 지원 안내(본문이 자기 푸터를 그린다)
 //  - /about      : 회사 정보. 위와 같다
-//  - /pwinquiry  : 비밀번호 변경. 입력에 집중해야 해 메뉴를 띄우지 않는다(apps/tv 와 같다)
+//  - /pwinquiry  : 비밀번호 변경. 입력에 집중해야 해 메뉴를 띄우지 않는다
 const HIDE_CHROME_PATHS = ["/play", "/login", "/popcorn", "/creator", "/about", "/pwinquiry"];
 
 export default function LayoutShell({ children }: { children: React.ReactNode }) {
@@ -39,7 +38,7 @@ export default function LayoutShell({ children }: { children: React.ReactNode })
     );
 
     const hideChrome = HIDE_CHROME_PATHS.some((p) => pathname.startsWith(p));
-    // 상세(/contents/:id)는 세로에서만 헤더를 숨긴다(mobile_style 이 처리 — apps/web 과 같다).
+    // 상세(/contents/:id)는 세로에서만 헤더를 숨긴다(mobile_style 이 처리).
     const isContents = pathname.startsWith("/contents");
 
     return (

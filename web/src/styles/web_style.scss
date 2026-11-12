@@ -1295,7 +1295,7 @@
                     width: 100%;
                     padding-top: 56.02%;
 
-                    // next/image(fill)가 aspect-ratio 박스를 덮도록
+                    // Image(fill)가 aspect-ratio 박스를 덮도록
                     img {
                         object-fit: cover;
                     }
@@ -1483,7 +1483,7 @@
                     > .bg {
                         @include bg_cover;
                         // 썸네일 스켈레톤: 이미지가 도착하기 전까지 이 검정 사각형이 카드 자리를 드러낸다.
-                        // TV 는 compat/Image 가 lazy 로딩이고 CMS 원본이 크기 때문에(평균 2.7MB)
+                        // compat/Image 가 lazy 로딩이라
                         // 빈 구간이 특히 길게 체감된다. 페이지 배경($black_1: #151a23)과 구분되어야
                         // 하므로 변수 대신 순수 검정을 쓴다. 아래 img 가 object-fit:cover 로 이 박스를
                         // 완전히 덮으므로, 로드되는 순간 별도 처리 없이 교체된다.
@@ -1493,7 +1493,7 @@
                         width: 100%;
                         padding-top: 56.02%;
 
-                        // next/image(fill)가 aspect-ratio 박스를 덮도록
+                        // Image(fill)가 aspect-ratio 박스를 덮도록
                         img {
                             object-fit: cover;
                         }
@@ -1621,7 +1621,7 @@
                     > .bg {
                         @include bg_cover;
                         // 썸네일 스켈레톤: 이미지가 도착하기 전까지 이 검정 사각형이 카드 자리를 드러낸다.
-                        // TV 는 compat/Image 가 lazy 로딩이고 CMS 원본이 크기 때문에(평균 2.7MB)
+                        // compat/Image 가 lazy 로딩이라
                         // 빈 구간이 특히 길게 체감된다. 페이지 배경($black_1: #151a23)과 구분되어야
                         // 하므로 변수 대신 순수 검정을 쓴다. 아래 img 가 object-fit:cover 로 이 박스를
                         // 완전히 덮으므로, 로드되는 순간 별도 처리 없이 교체된다.
@@ -1631,7 +1631,7 @@
                         width: 100%;
                         padding-top: 56.02%;
 
-                        // next/image(fill)가 aspect-ratio 박스를 덮도록
+                        // Image(fill)가 aspect-ratio 박스를 덮도록
                         img {
                             object-fit: cover;
                         }
@@ -2874,7 +2874,7 @@
                         padding-top: 24px;
                         font-size: 0;
 
-                        // 차량 앱은 "바로보기"가 <button> 이다(세로 정렬 때문에 apps/web 처럼 바꿈). TV 의 `a` 규칙만 두면
+                        // "바로보기"는 <button> 이다. `a` 규칙만 두면
                         // 버튼이 기본 btn_type1(flex, 블록)으로 남아 찜·좋아요가 다음 줄로 밀린다 — 둘 다 같은 줄에 둔다.
                         a,
                         button {

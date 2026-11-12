@@ -1,4 +1,4 @@
-// 약관/개인정보 — apps/web 의 app/policy/[type]/page.tsx 대응.
+// 약관/개인정보.
 
 import { useParams } from "@/compat/navigation";
 import TermsOfService from "@/components/service";

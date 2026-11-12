@@ -1,5 +1,4 @@
-// FAQ 바텀시트 — apps/web 의 components/common/faq.tsx 를 옮겼다(import 만 compat 으로 바꿨다).
-import React from "react";
+// FAQ 바텀시트.
 import { useRouter } from "@/compat/navigation";
 import { useEffect, useState } from "react";
 import type { FaqItem } from "@aim/core/types/faq";

@@ -20,7 +20,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
- * 브릿지 v2 프로토콜(apps/pleos src/native/bridge.ts 와 짝) — 요청 ID 매칭, 타임아웃, 오류 형태, 스크립트 이스케이프.
+ * 브릿지 v2 프로토콜(web/src/native/bridge.ts 와 짝) — 요청 ID 매칭, 타임아웃, 오류 형태, 스크립트 이스케이프.
  * emit 으로 나간 스크립트를 웹 쪽 resolver 와 같은 방식으로 해석해 확인한다.
  */
 @OptIn(ExperimentalCoroutinesApi::class)

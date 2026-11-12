@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
- * apps/tv/src/auth/apiClient.ts 의 핵심 — refresh 동시 실행 방지.
+ * web/src/auth/apiClient.ts 의 핵심 — refresh 동시 실행 방지.
  * 실제 HTTP(MockWebServer)와 실제 스레드에서 동시에 요청을 보내 경합을 재현한다.
  */
 class ApiClientTest {
